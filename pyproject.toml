@@ -1,0 +1,35 @@
+[build-system]
+requires = ["setuptools>=69"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "sentinelai-x"
+version = "0.1.0"
+description = "AI-Powered Intrusion Prevention System sensor"
+readme = "README.md"
+requires-python = ">=3.12"
+dependencies = [
+    "scapy>=2.5.0",
+]
+
+[project.optional-dependencies]
+dev = [
+    "pytest>=8.0.0",
+    "pytest-cov>=5.0.0",
+]
+
+[tool.setuptools.packages.find]
+where = ["."]
+include = ["sensor*"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+pythonpath = ["."]
+addopts = "-q"
+markers = [
+    "integration: tests that require Scapy and live OS interfaces",
+]
+
+[tool.ruff]
+line-length = 88
+target-version = "py312"
