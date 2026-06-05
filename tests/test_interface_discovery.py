@@ -1,246 +1,243 @@
-"""Unit and integration tests for interface discovery."""
+"""Tests for the single-file interface discovery module."""
 
 from __future__ import annotations
 
+import json
+import logging
 from dataclasses import dataclass
 from typing import Any
 
 import pytest
 
-from sensor.interface_discovery.classifier import InterfaceClassifier
-from sensor.interface_discovery.config import InterfaceDiscoverySettings
-from sensor.interface_discovery.discovery import InterfaceDiscovery
-from sensor.interface_discovery.exceptions import (
-    InterfaceNotFoundError,
-    InterfaceProviderError,
-    InterfaceValidationError,
+from sensor import interface_discovery
+from sensor.interface_discovery import (
+    InterfaceDiscovery,
+    InterfaceDiscoveryError,
+    JsonLogFormatter,
+    NetworkInterface,
+    configure_logging,
+    main,
+    parse_args,
 )
-from sensor.interface_discovery.health import InterfaceDiscoveryHealthCheck
-from sensor.interface_discovery.models import InterfaceType, OperationalStatus
-from sensor.interface_discovery.normalizer import InterfaceNormalizer
-from sensor.interface_discovery.sanitization import validate_interface_name
-from sensor.interface_discovery.selector import PrimaryInterfaceSelector
 
 
 @dataclass
 class FakeRawInterface:
-    """Test double mimicking Scapy interface shape."""
+    """Test double mimicking the Scapy interface attributes used by the module."""
 
-    name: str
-    description: str = ""
-    index: int | None = None
+    name: str | None = None
+    description: str | None = None
+    index: int | str | None = None
     mac: str | None = None
     ip: str | None = None
-    ips: list[str] | None = None
-    mtu: int | None = None
-    is_up: bool | None = None
+    ips: list[str] | tuple[str, ...] | set[str] | None = None
+
+    def __str__(self) -> str:
+        return "fallback-interface"
 
 
-class FakeProvider:
-    """In-memory provider for deterministic tests."""
+class FailingInterfaces:
+    """Scapy IFACES test double that raises while enumerating interfaces."""
 
-    provider_name = "fake"
-
-    def __init__(self, interfaces: list[FakeRawInterface]) -> None:
-        self._interfaces = interfaces
-
-    def enumerate_raw_interfaces(self) -> list[FakeRawInterface]:
-        return list(self._interfaces)
+    def values(self) -> list[Any]:
+        raise OSError("simulated scapy failure")
 
 
-class FailingProvider:
-    """Provider that always fails."""
+def test_network_interface_is_immutable() -> None:
+    interface = NetworkInterface(
+        name="eth0",
+        description="Ethernet adapter",
+        index=1,
+        mac_address="00:11:22:33:44:55",
+        ip_address="192.168.1.10",
+    )
 
-    provider_name = "failing"
-
-    def enumerate_raw_interfaces(self) -> list[Any]:
-        raise InterfaceProviderError("simulated failure")
-
-
-class TestInterfaceClassifier:
-    def test_classifies_loopback(self) -> None:
-        classifier = InterfaceClassifier()
-        assert (
-            classifier.classify("lo", "Loopback Pseudo-Interface")
-            == InterfaceType.LOOPBACK
-        )
-
-    def test_classifies_wifi(self) -> None:
-        classifier = InterfaceClassifier()
-        assert classifier.classify("wlan0", "Wireless") == InterfaceType.WIFI
-
-    def test_classifies_vpn(self) -> None:
-        classifier = InterfaceClassifier()
-        assert classifier.classify("tun0", "OpenVPN") == InterfaceType.VPN
-
-    def test_classifies_virtual_docker(self) -> None:
-        classifier = InterfaceClassifier()
-        assert classifier.classify("docker0", "Docker bridge") == InterfaceType.VIRTUAL
+    with pytest.raises(Exception):
+        interface.name = "wlan0"  # type: ignore[misc]
 
 
-class TestInterfaceNormalizer:
-    def test_extracts_ipv4_and_ipv6(self) -> None:
-        normalizer = InterfaceNormalizer()
-        raw = FakeRawInterface(
+def test_discover_normalizes_scapy_interfaces(monkeypatch: pytest.MonkeyPatch) -> None:
+    fake_ifaces = {
+        "eth0": FakeRawInterface(
+            name="eth0",
+            description=" Intel Ethernet ",
+            index="7",
+            mac=" 00:11:22:33:44:55 ",
+            ip=" 192.168.1.10 ",
+        ),
+        "wlan0": FakeRawInterface(
+            name="wlan0",
+            description="Wi-Fi",
+            index=None,
+            mac=None,
+            ips=["", "10.0.0.8"],
+        ),
+    }
+    monkeypatch.setattr(interface_discovery, "IFACES", fake_ifaces)
+
+    interfaces = InterfaceDiscovery().discover()
+
+    assert interfaces == [
+        NetworkInterface(
             name="eth0",
             description="Intel Ethernet",
-            mac="aa-bb-cc-dd-ee-ff",
-            ips=["192.168.1.10", "fe80::1"],
-            is_up=True,
-            mtu=1500,
-        )
-        iface = normalizer.normalize(raw)
-        assert iface.ipv4_address == "192.168.1.10"
-        assert iface.ipv6_address is None  # link-local skipped
-        assert iface.mac_address == "aa:bb:cc:dd:ee:ff"
-        assert iface.mtu == 1500
-        assert iface.is_active is True
-
-    def test_loopback_not_active(self) -> None:
-        normalizer = InterfaceNormalizer()
-        raw = FakeRawInterface(
-            name="lo",
-            description="Loopback",
-            ip="127.0.0.1",
-            is_up=True,
-        )
-        iface = normalizer.normalize(raw)
-        assert iface.interface_type == InterfaceType.LOOPBACK
-        assert iface.is_active is False
+            index=7,
+            mac_address="00:11:22:33:44:55",
+            ip_address="192.168.1.10",
+        ),
+        NetworkInterface(
+            name="wlan0",
+            description="Wi-Fi",
+            index=None,
+            mac_address=None,
+            ip_address="10.0.0.8",
+        ),
+    ]
 
 
-class TestPrimaryInterfaceSelector:
-    def test_prefers_ethernet_over_wifi(self) -> None:
-        normalizer = InterfaceNormalizer()
-        eth = normalizer.normalize(
-            FakeRawInterface(
+def test_discover_uses_fallback_values(monkeypatch: pytest.MonkeyPatch) -> None:
+    monkeypatch.setattr(
+        interface_discovery,
+        "IFACES",
+        {"fallback": FakeRawInterface(description="", index="not-an-int")},
+    )
+
+    interfaces = InterfaceDiscovery().discover()
+
+    assert interfaces == [
+        NetworkInterface(
+            name="fallback-interface",
+            description="N/A",
+            index=None,
+            mac_address=None,
+            ip_address=None,
+        ),
+    ]
+
+
+def test_discover_wraps_scapy_failures(monkeypatch: pytest.MonkeyPatch) -> None:
+    monkeypatch.setattr(interface_discovery, "IFACES", FailingInterfaces())
+
+    with pytest.raises(InterfaceDiscoveryError, match="Unable to discover"):
+        InterfaceDiscovery().discover()
+
+
+def test_get_interface_by_name_is_case_insensitive(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    monkeypatch.setattr(
+        interface_discovery,
+        "IFACES",
+        {
+            "eth0": FakeRawInterface(name="eth0", description="Ethernet"),
+            "wlan0": FakeRawInterface(name="wlan0", description="Wi-Fi"),
+        },
+    )
+
+    discovery = InterfaceDiscovery()
+
+    assert discovery.get_interface_by_name("WLAN0") == NetworkInterface(
+        name="wlan0",
+        description="Wi-Fi",
+        index=None,
+        mac_address=None,
+        ip_address=None,
+    )
+    assert discovery.get_interface_by_name("missing0") is None
+
+
+def test_render_table_formats_interfaces() -> None:
+    rendered = InterfaceDiscovery().render_table(
+        [
+            NetworkInterface(
+                name="eth0",
+                description="Ethernet",
+                index=2,
+                mac_address="00:11:22:33:44:55",
+                ip_address="192.168.1.10",
+            ),
+        ],
+    )
+
+    assert "Name | Description | Index | MAC Address" in rendered
+    assert "eth0 | Ethernet" in rendered
+    assert "192.168.1.10" in rendered
+
+
+def test_render_table_handles_empty_list() -> None:
+    assert InterfaceDiscovery().render_table([]) == "No network interfaces found."
+
+
+def test_json_log_formatter_outputs_structured_json() -> None:
+    formatter = JsonLogFormatter()
+    record = logging.LogRecord(
+        name="sentinelai_x.test",
+        level=logging.INFO,
+        pathname=__file__,
+        lineno=10,
+        msg="hello %s",
+        args=("world",),
+        exc_info=None,
+        func="test_func",
+    )
+
+    payload = json.loads(formatter.format(record))
+
+    assert payload["level"] == "INFO"
+    assert payload["logger"] == "sentinelai_x.test"
+    assert payload["message"] == "hello world"
+    assert payload["function"] == "test_func"
+
+
+def test_configure_logging_installs_json_formatter() -> None:
+    configure_logging("DEBUG")
+    root_logger = logging.getLogger()
+
+    assert root_logger.level == logging.DEBUG
+    assert len(root_logger.handlers) == 1
+    assert isinstance(root_logger.handlers[0].formatter, JsonLogFormatter)
+
+
+def test_parse_args_defaults_to_info() -> None:
+    args = parse_args([])
+
+    assert args.log_level == "INFO"
+
+
+def test_parse_args_accepts_supported_log_level() -> None:
+    args = parse_args(["--log-level", "DEBUG"])
+
+    assert args.log_level == "DEBUG"
+
+
+def test_main_prints_discovered_interfaces(
+    monkeypatch: pytest.MonkeyPatch,
+    capsys: pytest.CaptureFixture[str],
+) -> None:
+    monkeypatch.setattr(
+        interface_discovery,
+        "IFACES",
+        {
+            "eth0": FakeRawInterface(
                 name="eth0",
                 description="Ethernet",
                 ip="10.0.0.5",
-                is_up=True,
             ),
-        )
-        wifi = normalizer.normalize(
-            FakeRawInterface(
-                name="wlan0",
-                description="Wi-Fi",
-                ip="10.0.0.8",
-                is_up=True,
-            ),
-        )
-        selector = PrimaryInterfaceSelector()
-        primary = selector.select_primary([wifi, eth])
-        assert primary is not None
-        assert primary.name == "eth0"
+        },
+    )
 
-    def test_excludes_virtual_when_configured(self) -> None:
-        normalizer = InterfaceNormalizer()
-        docker = normalizer.normalize(
-            FakeRawInterface(
-                name="docker0",
-                description="Docker",
-                ip="172.17.0.1",
-                is_up=True,
-            ),
-        )
-        settings = InterfaceDiscoverySettings(exclude_virtual_from_primary=True)
-        selector = PrimaryInterfaceSelector(settings=settings)
-        assert selector.select_primary([docker]) is None
+    exit_code = main(["--log-level", "INFO"])
+
+    captured = capsys.readouterr()
+    assert exit_code == 0
+    assert "SentinelAI-X Network Interface Discovery" in captured.out
+    assert "eth0" in captured.out
+    assert "10.0.0.5" in captured.out
 
 
-class TestInterfaceDiscoveryService:
-    def test_discover_snapshot_with_fake_provider(self) -> None:
-        provider = FakeProvider(
-            [
-                FakeRawInterface(
-                    name="eth0",
-                    description="Ethernet",
-                    ip="192.168.0.2",
-                    mac="00:11:22:33:44:55",
-                    is_up=True,
-                ),
-                FakeRawInterface(name="lo", description="Loopback", ip="127.0.0.1"),
-            ],
-        )
-        discovery = InterfaceDiscovery(
-            provider=provider,
-            settings=InterfaceDiscoverySettings(cache_discovery=False),
-        )
-        snapshot = discovery.discover_snapshot()
-        assert len(snapshot.interfaces) == 2
-        assert snapshot.primary_interface is not None
-        assert snapshot.primary_interface.name == "eth0"
+def test_main_returns_error_code_when_discovery_fails(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    monkeypatch.setattr(interface_discovery, "IFACES", FailingInterfaces())
 
-    def test_get_interface_by_name_raises_when_missing(self) -> None:
-        discovery = InterfaceDiscovery(provider=FakeProvider([]))
-        with pytest.raises(InterfaceNotFoundError):
-            discovery.get_interface_by_name("missing0")
-
-    def test_find_interface_by_name_returns_none(self) -> None:
-        discovery = InterfaceDiscovery(provider=FakeProvider([]))
-        assert discovery.find_interface_by_name("missing0") is None
-
-    def test_provider_failure_increments_metrics(self) -> None:
-        discovery = InterfaceDiscovery(
-            provider=FailingProvider(),
-            settings=InterfaceDiscoverySettings(cache_discovery=False),
-        )
-        with pytest.raises(InterfaceProviderError):
-            discovery.discover_snapshot()
-        assert discovery.metrics.discovery_failures == 1
-
-
-class TestValidationAndSanitization:
-    def test_rejects_empty_name(self) -> None:
-        settings = InterfaceDiscoverySettings()
-        with pytest.raises(InterfaceValidationError):
-            validate_interface_name("  ", settings)
-
-    def test_rejects_control_characters(self) -> None:
-        settings = InterfaceDiscoverySettings()
-        with pytest.raises(InterfaceValidationError):
-            validate_interface_name("eth\x000", settings)
-
-
-class TestHealthCheck:
-    def test_healthy_when_primary_present(self) -> None:
-        provider = FakeProvider(
-            [
-                FakeRawInterface(
-                    name="eth0",
-                    description="Ethernet",
-                    ip="10.1.1.5",
-                    is_up=True,
-                ),
-            ],
-        )
-        discovery = InterfaceDiscovery(
-            provider=provider,
-            settings=InterfaceDiscoverySettings(cache_discovery=False),
-        )
-        result = InterfaceDiscoveryHealthCheck(discovery).check()
-        assert result.status.value == "healthy"
-
-    def test_degraded_when_no_interfaces(self) -> None:
-        discovery = InterfaceDiscovery(
-            provider=FakeProvider([]),
-            settings=InterfaceDiscoverySettings(cache_discovery=False),
-        )
-        result = InterfaceDiscoveryHealthCheck(discovery).check()
-        assert result.status.value == "degraded"
-
-
-@pytest.mark.integration
-class TestScapyIntegration:
-    def test_scapy_discovery_runs(self) -> None:
-        pytest.importorskip("scapy")
-        from sensor.interface_discovery.providers.scapy_provider import (
-            ScapyInterfaceProvider,
-        )
-
-        discovery = InterfaceDiscovery(
-            provider=ScapyInterfaceProvider(),
-            settings=InterfaceDiscoverySettings(cache_discovery=False),
-        )
-        snapshot = discovery.discover_snapshot()
-        assert isinstance(snapshot.interfaces, tuple)
+    assert main(["--log-level", "INFO"]) == 1

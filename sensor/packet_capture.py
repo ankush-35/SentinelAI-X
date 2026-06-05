@@ -1,23 +1,14 @@
-"""Live packet capture module for SentinelAI-X.
-
-This module captures live network packets from a selected local interface and
-normalizes lightweight metadata for future parser and traffic logging stages.
-"""
+"""Live packet capture support for SentinelAI-X sensors."""
 
 from __future__ import annotations
 
 import argparse
 import logging
 import sys
-from dataclasses import asdict, dataclass, field
+from dataclasses import asdict, dataclass
 from typing import Any, Callable, Protocol
 
-try:
-    from scapy.all import ICMP, IP, TCP, UDP, IPv6, Packet, sniff
-except ImportError as exc:
-    raise RuntimeError(
-        "Scapy is required for packet capture. Install it with: pip install scapy"
-    ) from exc
+from scapy.all import ICMP, IP, TCP, UDP, IPv6, sniff
 
 from sensor.interface_discovery import (
     InterfaceDiscovery,
@@ -27,34 +18,22 @@ from sensor.interface_discovery import (
 )
 
 
-SniffFunction = Callable[..., Any]
-
-
-class PacketCaptureError(RuntimeError):
-    """Raised when packet capture cannot be completed."""
-
-
-class InterfaceDiscoveryService(Protocol):
-    """Protocol for interface discovery services used by packet capture."""
+class InterfaceDiscoveryProtocol(Protocol):
+    """Interface discovery behavior required by packet capture."""
 
     def discover(self) -> list[NetworkInterface]:
         """Return discovered network interfaces."""
 
     def get_interface_by_name(self, name: str) -> NetworkInterface | None:
-        """Return a discovered interface by name, if present."""
+        """Return a network interface by name, or None when not found."""
+
+
+SniffFunction = Callable[..., Any]
 
 
 @dataclass(frozen=True, slots=True)
 class PacketMetadata:
-    """Normalized packet metadata captured from the wire.
-
-    Attributes:
-        timestamp: Packet capture timestamp as seconds since the Unix epoch.
-        source_ip: Source IP address, if the packet has an IP layer.
-        destination_ip: Destination IP address, if the packet has an IP layer.
-        protocol: Transport or network protocol name.
-        packet_length: Captured packet length in bytes.
-    """
+    """Small, stable metadata record extracted from a captured packet."""
 
     timestamp: float
     source_ip: str | None
@@ -63,8 +42,12 @@ class PacketMetadata:
     packet_length: int
 
     def to_dict(self) -> dict[str, Any]:
-        """Return JSON-serializable metadata for downstream modules."""
+        """Return the metadata as a JSON-serializable dictionary."""
         return asdict(self)
+
+
+class PacketCaptureError(RuntimeError):
+    """Raised when packet capture cannot be completed."""
 
 
 @dataclass(frozen=True, slots=True)
@@ -76,24 +59,33 @@ class PacketCaptureConfig:
     timeout: float | None = 30.0
 
 
-@dataclass(slots=True)
 class PacketCapture:
-    """Capture live packets and retain normalized metadata in memory.
+    """Capture packets from a selected interface and store packet metadata."""
 
-    The class intentionally stores metadata rather than raw packets so future
-    modules such as `packet_parser.py` and `traffic_logger.py` can consume a
-    stable, JSON-friendly representation without depending on Scapy internals.
-    """
+    def __init__(
+        self,
+        config: PacketCaptureConfig | None = None,
+        discovery: InterfaceDiscoveryProtocol | None = None,
+        sniff_function: SniffFunction | None = None,
+        logger: logging.Logger | None = None,
+    ) -> None:
+        """Initialize the packet capture service.
 
-    config: PacketCaptureConfig = field(default_factory=PacketCaptureConfig)
-    discovery: InterfaceDiscoveryService = field(
-        default_factory=InterfaceDiscovery,
-    )
-    logger: logging.Logger = field(
-        default_factory=lambda: logging.getLogger("sentinelai_x.packet_capture"),
-    )
-    sniff_function: SniffFunction = sniff
-    packet_metadata: list[PacketMetadata] = field(default_factory=list)
+        Args:
+            config: Optional capture defaults.
+            discovery: Interface discovery service. Defaults to InterfaceDiscovery.
+            sniff_function: Packet sniffing callable. Defaults to scapy.sniff.
+            logger: Optional logger instance.
+        """
+        self.config = config or PacketCaptureConfig()
+        self._discovery = discovery or InterfaceDiscovery()
+        self.discovery = self._discovery
+        self._sniff = sniff_function or sniff
+        self.sniff_function = self._sniff
+        self._logger = logger or logging.getLogger(self.__class__.__name__)
+        self.logger = self._logger
+        self._captured_metadata: list[PacketMetadata] = []
+        self.packet_metadata = self._captured_metadata
 
     def capture(
         self,
@@ -101,154 +93,135 @@ class PacketCapture:
         timeout: float | None = None,
         interface_name: str | None = None,
     ) -> list[PacketMetadata]:
-        """Capture packets from the selected interface.
+        """Capture packets and return metadata extracted during this capture.
 
         Args:
-            count: Optional capture count override. A value of zero lets Scapy
-                capture until timeout or interruption.
-            timeout: Optional capture timeout override in seconds.
-            interface_name: Optional interface name override.
+            count: Maximum number of packets to capture. Zero delegates to Scapy.
+            timeout: Optional capture timeout in seconds.
+            interface_name: Optional explicit interface name.
 
         Returns:
-            A snapshot list of packet metadata collected during this run.
+            Metadata records captured during this call.
 
         Raises:
-            PacketCaptureError: If interface resolution or packet capture fails.
+            PacketCaptureError: If interface selection or packet capture fails.
         """
         effective_count = self.config.count if count is None else count
         effective_timeout = self.config.timeout if timeout is None else timeout
-        selected_interface = self._resolve_interface(
-            interface_name or self.config.interface_name,
-        )
-        self._validate_capture_options(effective_count, effective_timeout)
+        effective_interface = interface_name or self.config.interface_name
 
-        start_index = len(self.packet_metadata)
-        self.logger.info(
-            "Starting packet capture on interface %s",
-            selected_interface.name,
-        )
+        self._validate_capture_options(effective_count, effective_timeout)
+        interface = self._select_interface(effective_interface)
+        captured_this_call: list[PacketMetadata] = []
+
+        def handle_packet(packet: Any) -> None:
+            metadata = self.extract_metadata(packet)
+            self._captured_metadata.append(metadata)
+            captured_this_call.append(metadata)
 
         try:
-            self.sniff_function(
-                iface=selected_interface.name,
+            self._logger.info("Starting packet capture on interface %s", interface.name)
+            self._sniff(
+                iface=interface.name,
                 count=effective_count,
                 timeout=effective_timeout,
-                prn=self._store_packet_metadata,
+                prn=handle_packet,
                 store=False,
             )
+        except PacketCaptureError:
+            raise
         except Exception as exc:
-            self.logger.exception(
-                "Packet capture failed on interface %s",
-                selected_interface.name,
-            )
-            raise PacketCaptureError(
-                f"Unable to capture packets on interface "
-                f"{selected_interface.name!r}"
-            ) from exc
+            self._logger.exception("Packet capture failed")
+            raise PacketCaptureError("Unable to capture packets") from exc
 
-        captured = self.packet_metadata[start_index:]
-        self.logger.info(
-            "Completed packet capture on interface %s: %d packet(s) captured",
-            selected_interface.name,
-            len(captured),
+        self._logger.info(
+            "Completed packet capture: %d packet(s) captured",
+            len(captured_this_call),
         )
-        return list(captured)
+        return captured_this_call
 
     def clear(self) -> None:
         """Remove all packet metadata currently stored in memory."""
-        self.packet_metadata.clear()
-        self.logger.info("Cleared packet metadata buffer")
+        self._captured_metadata.clear()
 
     def export_metadata(self) -> list[dict[str, Any]]:
-        """Return buffered metadata for parser or logger integration."""
-        return [metadata.to_dict() for metadata in self.packet_metadata]
+        """Return all captured metadata as dictionaries."""
+        return [metadata.to_dict() for metadata in self._captured_metadata]
 
-    def _resolve_interface(
-        self,
-        requested_interface: str | None,
-    ) -> NetworkInterface:
-        """Resolve the requested interface or select a likely active one."""
-        try:
-            if requested_interface:
-                interface = self.discovery.get_interface_by_name(
-                    requested_interface,
+    def _select_interface(self, interface_name: str | None) -> NetworkInterface:
+        """Return the requested interface or a sensible default."""
+        if interface_name:
+            interface = self._discovery.get_interface_by_name(interface_name)
+            if interface is None:
+                raise PacketCaptureError(
+                    f"Network interface {interface_name!r} was not found"
                 )
-                if interface is None:
-                    raise PacketCaptureError(
-                        f"Interface {requested_interface!r} was not found"
-                    )
-                return interface
+            return interface
 
-            interfaces = self.discovery.discover()
+        try:
+            interfaces = self._discovery.discover()
         except InterfaceDiscoveryError as exc:
             raise PacketCaptureError("Unable to discover capture interfaces") from exc
 
-        if not interfaces:
-            raise PacketCaptureError("No network interfaces are available")
-
-        selected = self._select_default_interface(interfaces)
-        self.logger.info(
-            "Selected default capture interface %s",
-            selected.name,
-        )
-        return selected
-
-    @staticmethod
-    def _select_default_interface(
-        interfaces: list[NetworkInterface],
-    ) -> NetworkInterface:
-        """Select a likely active, non-loopback interface."""
         for interface in interfaces:
-            name = interface.name.casefold()
-            description = interface.description.casefold()
+            if self._is_capture_candidate(interface):
+                return interface
 
-            if interface.ip_address and "loopback" not in description:
-                if name not in {"lo", "localhost"}:
-                    return interface
+        if interfaces:
+            return interfaces[0]
 
-        return interfaces[0]
-
-    def _store_packet_metadata(self, packet: Packet) -> None:
-        """Extract and store metadata from a Scapy packet callback."""
-        metadata = self.extract_metadata(packet)
-        self.packet_metadata.append(metadata)
-        self.logger.debug(
-            "Captured packet metadata: %s",
-            metadata.to_dict(),
-        )
+        raise PacketCaptureError("No network interfaces are available")
 
     @staticmethod
-    def extract_metadata(packet: Packet) -> PacketMetadata:
-        """Extract normalized metadata from a Scapy packet."""
+    def _is_capture_candidate(interface: NetworkInterface) -> bool:
+        """Return True when the interface is a practical default capture target."""
+        name = interface.name.casefold()
+        ip_address = interface.ip_address or ""
+
+        if name in {"lo", "loopback"} or "loopback" in interface.description.casefold():
+            return False
+        if ip_address.startswith("127."):
+            return False
+
+        return True
+
+    @staticmethod
+    def extract_metadata(packet: Any) -> PacketMetadata:
+        """Extract basic metadata from a Scapy packet."""
         source_ip: str | None = None
         destination_ip: str | None = None
-        protocol = "UNKNOWN"
 
         if packet.haslayer(IP):
-            ip_layer = packet.getlayer(IP)
+            ip_layer = packet[IP]
             source_ip = str(ip_layer.src)
             destination_ip = str(ip_layer.dst)
-            protocol = str(ip_layer.sprintf("%IP.proto%")).upper()
         elif packet.haslayer(IPv6):
-            ipv6_layer = packet.getlayer(IPv6)
-            source_ip = str(ipv6_layer.src)
-            destination_ip = str(ipv6_layer.dst)
-            protocol = "IPv6"
-
-        if packet.haslayer(TCP):
-            protocol = "TCP"
-        elif packet.haslayer(UDP):
-            protocol = "UDP"
-        elif packet.haslayer(ICMP):
-            protocol = "ICMP"
+            ip_layer = packet[IPv6]
+            source_ip = str(ip_layer.src)
+            destination_ip = str(ip_layer.dst)
 
         return PacketMetadata(
             timestamp=float(getattr(packet, "time", 0.0)),
             source_ip=source_ip,
             destination_ip=destination_ip,
-            protocol=protocol,
+            protocol=PacketCapture._detect_protocol(packet),
             packet_length=len(packet),
         )
+
+    @staticmethod
+    def _detect_protocol(packet: Any) -> str:
+        """Return a simple protocol name for the packet."""
+        if packet.haslayer(TCP):
+            return "TCP"
+        if packet.haslayer(UDP):
+            return "UDP"
+        if packet.haslayer(ICMP):
+            return "ICMP"
+        if packet.haslayer(IP):
+            return "IP"
+        if packet.haslayer(IPv6):
+            return "IPv6"
+        return "UNKNOWN"
 
     @staticmethod
     def _validate_capture_options(
@@ -272,10 +245,7 @@ def parse_args(argv: list[str]) -> argparse.Namespace:
     parser.add_argument(
         "--interface",
         dest="interface_name",
-        help=(
-            "Interface name to capture from. Defaults to a discovered active "
-            "interface."
-        ),
+        help="Interface name to capture from.",
     )
     parser.add_argument(
         "--count",
