@@ -46,7 +46,6 @@ class JsonLogFormatter(logging.Formatter):
         return json.dumps(payload, default=str, ensure_ascii=True)
 
 
-# test codex edit
 def build_logger(name: str = "sentinelai_x.alert_manager") -> logging.Logger:
     """Create a structured logger without modifying the root logger."""
     logger = logging.getLogger(name)
