@@ -156,11 +156,11 @@ class AnomalyDetectorConfig:
             "max_window_events": self.max_window_events,
             "findings_limit_per_packet": self.findings_limit_per_packet,
         }
-        for name, value in positive_ints.items():
-            if isinstance(value, bool) or value <= 0:
+        for name, int_value in positive_ints.items():
+            if isinstance(int_value, bool) or int_value <= 0:
                 raise ValueError(f"{name} must be greater than zero")
 
-        positive_floats = {
+        positive_floats: dict[str, int | float] = {
             "learning_window_seconds": self.learning_window_seconds,
             "observation_window_seconds": self.observation_window_seconds,
             "traffic_spike_multiplier": self.traffic_spike_multiplier,
@@ -170,10 +170,12 @@ class AnomalyDetectorConfig:
             "risk_weight_rare_port": self.risk_weight_rare_port,
             "risk_weight_protocol_anomaly": self.risk_weight_protocol_anomaly,
         }
-        for name, value in positive_floats.items():
-            if isinstance(value, bool) or not isinstance(value, (int, float)):
+        for name, float_value in positive_floats.items():
+            if isinstance(float_value, bool) or not isinstance(
+                float_value, (int, float)
+            ):
                 raise ValueError(f"{name} must be numeric")
-            if value <= 0:
+            if float_value <= 0:
                 raise ValueError(f"{name} must be greater than zero")
 
         if self.rare_port_frequency_threshold > 1.0:
@@ -404,7 +406,7 @@ class AnomalyDetector:
             and current_rate
             >= baseline_rate * self._config.traffic_spike_multiplier
         )
-        if spike_detected:
+        if spike_detected and source_ip is not None:
             if source_ip not in self._active_spike_sources:
                 self._active_spike_sources.add(source_ip)
                 findings.append(
@@ -503,7 +505,7 @@ class AnomalyDetector:
     def _prune_least_frequent(counts: dict[Any, int]) -> None:
         if not counts:
             return
-        key_to_remove = min(counts, key=counts.get)
+        key_to_remove = min(counts, key=lambda key: counts[key])
         counts.pop(key_to_remove, None)
 
 
