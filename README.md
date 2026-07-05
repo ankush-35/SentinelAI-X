@@ -150,7 +150,7 @@ SentinelAI-X/
 Clone the repository:
 
 ```bash
-git clone https://github.com/<your-username>/SentinelAI-X.git
+git clone https://github.com/ankush-35/SentinelAI-X.git
 cd SentinelAI-X
 ```
 
