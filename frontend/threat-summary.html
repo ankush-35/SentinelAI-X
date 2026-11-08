@@ -1,0 +1,298 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SentinelAI-X | Threat Summary</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600;700&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/threat-summary.css">
+</head>
+<body>
+
+<div class="noise-overlay"></div>
+
+<div class="app-shell">
+
+  <!-- ===================== SIDEBAR ===================== -->
+  <aside class="sidebar" id="sidebar">
+
+    <div class="sidebar__brand">
+      <div class="brand-mark__logo" aria-hidden="true">
+        <svg viewBox="0 0 48 48" width="30" height="30">
+          <polygon points="24,3 43,12 43,26 24,45 5,26 5,12" fill="none" stroke="#2E8BFF" stroke-width="1.8"/>
+          <polygon points="24,11 36,17 36,25 24,37 12,25 12,17" fill="none" stroke="#57A8FF" stroke-width="1.2" opacity="0.7"/>
+          <circle cx="24" cy="24" r="2.6" fill="#57A8FF"/>
+        </svg>
+      </div>
+      <div class="sidebar__brand-text">
+        <span class="brand-mark__name">SENTINEL<span class="accent">AI-X</span></span>
+        <span class="brand-mark__tag">NETWORK DEFENSE PLATFORM</span>
+      </div>
+    </div>
+
+    <nav class="sidebar__nav" aria-label="Primary">
+      <span class="sidebar__label">Monitor</span>
+      <ul class="nav-list">
+        <li>
+          <a href="dashboard.html" class="nav-link">
+            <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="3" y="3" width="8" height="8"/><rect x="13" y="3" width="8" height="5"/><rect x="13" y="11" width="8" height="10"/><rect x="3" y="14" width="8" height="7"/></svg>
+            <span>Overview</span>
+          </a>
+        </li>
+        <li>
+          <a href="threat-summary.html" class="nav-link is-active">
+            <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M12 3l8 4v5c0 5-3.5 8.5-8 9-4.5-.5-8-4-8-9V7l8-4z"/></svg>
+            <span>Threat Summary</span>
+          </a>
+        </li>
+        <li>
+    <a href="network.html" class="nav-link">
+        <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6">
+            <circle cx="12" cy="5" r="2.2"/>
+            <circle cx="5" cy="19" r="2.2"/>
+            <circle cx="19" cy="19" r="2.2"/>
+            <path d="M12 7.2v4M12 11.2L6.3 17M12 11.2L17.7 17"/>
+        </svg>
+        <span>Network</span>
+    </a>
+</li>
+        <li>
+    <a href="live-logs.html" class="nav-link">
+        <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6">
+            <rect x="3" y="4" width="18" height="16" rx="0.5"/>
+            <path d="M7 9l3 2-3 2M12 13h5"/>
+        </svg>
+        <span>Live Logs</span>
+    </a>
+</li>
+      </ul>
+
+      <span class="sidebar__label">Manage</span>
+      <ul class="nav-list">
+        <li>
+          <a href="alerts.html" class="nav-link">
+            <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M18 8a6 6 0 10-12 0c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.7 21a2 2 0 01-3.4 0"/></svg>
+            <span>Alerts</span>
+            <span class="nav-badge">3</span>
+          </a>
+        </li>
+        <li>
+          <a href="settings.html" class="nav-link">
+            <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="12" cy="12" r="3"/><path d="M19.4 13a7.6 7.6 0 000-2l2-1.6-2-3.4-2.4 1a7.7 7.7 0 00-1.7-1L15 3h-6l-.3 2.4a7.7 7.7 0 00-1.7 1l-2.4-1-2 3.4L4.6 11a7.6 7.6 0 000 2l-2 1.6 2 3.4 2.4-1a7.7 7.7 0 001.7 1L9 21h6l.3-2.4a7.7 7.7 0 001.7-1l2.4 1 2-3.4-2-1.6z"/></svg>
+            <span>Settings</span>
+          </a>
+        </li>
+      </ul>
+    </nav>
+
+    <div class="sidebar__footer">
+      <button type="button" class="logout-btn" id="logout-btn">
+        <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M9 21H5a2 2 0 01-2-2V5a2 2 0 012-2h4"/><path d="M16 17l5-5-5-5"/><path d="M21 12H9"/></svg>
+        <span>End Session</span>
+      </button>
+    </div>
+
+  </aside>
+
+  <div class="sidebar-backdrop" id="sidebar-backdrop"></div>
+
+  <!-- ===================== MAIN ===================== -->
+  <div class="main">
+
+    <!-- ===================== TOP BAR ===================== -->
+    <header class="topbar">
+      <div class="topbar__left">
+        <button type="button" class="menu-toggle" id="menu-toggle" aria-label="Toggle navigation">
+          <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.8"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+        </button>
+        <div class="section-label">
+          <span class="section-label__mark" aria-hidden="true"></span>
+          <h1>THREAT SUMMARY</h1>
+        </div>
+      </div>
+
+      <div class="topbar__right">
+        <div class="topbar__clock" id="topbar-clock">
+          <span class="mono" id="clock-time">00:00:00</span>
+          <span class="dim mono" id="clock-date">—</span>
+        </div>
+
+        <button type="button" class="icon-btn" aria-label="Notifications">
+          <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M18 8a6 6 0 10-12 0c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.7 21a2 2 0 01-3.4 0"/></svg>
+          <span class="icon-btn__dot"></span>
+        </button>
+
+        <div class="agent-chip">
+          <span class="dot dot--ok" aria-hidden="true"></span>
+          <span class="mono">AGT-00417</span>
+        </div>
+      </div>
+    </header>
+
+    <!-- ===================== CONTENT ===================== -->
+    <main class="content">
+
+      <!-- TOOLBAR: search + filters -->
+      <section class="toolbar card--flat">
+        <div class="search-field">
+          <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="11" cy="11" r="7"/><line x1="21" y1="21" x2="16.2" y2="16.2"/></svg>
+          <input type="text" id="ip-search" placeholder="Search IP address, category, or event…" autocomplete="off" spellcheck="false">
+        </div>
+
+        <div class="filter-chips" id="filter-chips" role="group" aria-label="Filter by severity">
+          <button type="button" class="chip is-active" data-level="all">All</button>
+          <button type="button" class="chip chip--danger" data-level="critical">Critical</button>
+          <button type="button" class="chip chip--warning" data-level="high">High</button>
+          <button type="button" class="chip chip--blue" data-level="medium">Medium</button>
+          <button type="button" class="chip chip--success" data-level="low">Low</button>
+        </div>
+
+        <select class="range-select mono" id="range-select" aria-label="Time range">
+          <option value="24h">Last 24 hours</option>
+          <option value="7d" selected>Last 7 days</option>
+          <option value="30d">Last 30 days</option>
+        </select>
+      </section>
+
+      <!-- STAT CARDS -->
+      <section class="card stat-card" id="stat-total">
+        <div class="stat-card__icon stat-card__icon--blue" aria-hidden="true">
+          <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M12 3l8 4v5c0 5-3.5 8.5-8 9-4.5-.5-8-4-8-9V7l8-4z"/></svg>
+        </div>
+        <div class="stat-card__body">
+          <span class="stat-card__value mono" data-count="1842">0</span>
+          <span class="stat-card__label">Total Threats</span>
+        </div>
+        <span class="stat-card__trend stat-card__trend--up mono">▲ 6.2%</span>
+      </section>
+
+      <section class="card stat-card" id="stat-critical">
+        <div class="stat-card__icon stat-card__icon--danger" aria-hidden="true">
+          <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M12 9v4M12 17h.01"/><path d="M10.3 3.9L2.9 17a2 2 0 001.7 3h14.8a2 2 0 001.7-3L13.7 3.9a2 2 0 00-3.4 0z"/></svg>
+        </div>
+        <div class="stat-card__body">
+          <span class="stat-card__value mono" data-count="34">0</span>
+          <span class="stat-card__label">Critical Threats</span>
+        </div>
+        <span class="stat-card__trend stat-card__trend--up mono">▲ 12%</span>
+      </section>
+
+      <section class="card stat-card" id="stat-high">
+        <div class="stat-card__icon stat-card__icon--warning" aria-hidden="true">
+          <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M13 2L3 14h8l-1 8 10-12h-8l1-8z"/></svg>
+        </div>
+        <div class="stat-card__body">
+          <span class="stat-card__value mono" data-count="211">0</span>
+          <span class="stat-card__label">High Risk Threats</span>
+        </div>
+        <span class="stat-card__trend stat-card__trend--down mono">▼ 3.1%</span>
+      </section>
+
+      <section class="card stat-card" id="stat-resolved">
+        <div class="stat-card__icon stat-card__icon--success" aria-hidden="true">
+          <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M20 6L9 17l-5-5"/></svg>
+        </div>
+        <div class="stat-card__body">
+          <span class="stat-card__value mono" data-count="1563">0</span>
+          <span class="stat-card__label">Resolved Threats</span>
+        </div>
+        <span class="stat-card__trend stat-card__trend--up mono">▲ 9.4%</span>
+      </section>
+
+      <!-- THREAT CATEGORIES -->
+      <section class="card card--span-5" id="threat-categories">
+        <div class="card__header">
+          <div class="section-label">
+            <span class="section-label__mark" aria-hidden="true"></span>
+            <h2>Threat Categories</h2>
+          </div>
+          <span class="mono dim card__hint">7 DAYS</span>
+        </div>
+        <ul class="category-list" id="category-list"></ul>
+      </section>
+
+      <!-- SEVERITY DISTRIBUTION -->
+      <section class="card card--span-3" id="severity-distribution">
+        <div class="card__header">
+          <div class="section-label">
+            <span class="section-label__mark" aria-hidden="true"></span>
+            <h2>Severity Distribution</h2>
+          </div>
+        </div>
+        <div class="donut-wrap">
+          <svg class="donut" viewBox="0 0 120 120" id="donut-chart">
+            <circle cx="60" cy="60" r="48" fill="none" stroke="#232323" stroke-width="14"/>
+          </svg>
+          <div class="donut-center">
+            <span class="mono donut-center__value" id="donut-total">0</span>
+            <span class="donut-center__label">Total</span>
+          </div>
+        </div>
+        <ul class="legend" id="severity-legend"></ul>
+      </section>
+
+      <!-- RECENT SECURITY EVENTS -->
+      <section class="card card--span-4" id="recent-events">
+        <div class="card__header">
+          <div class="section-label">
+            <span class="section-label__mark" aria-hidden="true"></span>
+            <h2>Recent Security Events</h2>
+          </div>
+          <span class="status-pill status-pill--ok"><span class="pulse-dot" aria-hidden="true"></span>Live</span>
+        </div>
+        <ul class="event-list" id="event-list"></ul>
+      </section>
+
+      <!-- THREAT TIMELINE -->
+      <section class="card card--span-12" id="threat-timeline">
+        <div class="card__header">
+          <div class="section-label">
+            <span class="section-label__mark" aria-hidden="true"></span>
+            <h2>Threat Timeline</h2>
+          </div>
+          <span class="mono dim card__hint">EVENTS / HOUR &middot; LAST 24H</span>
+        </div>
+        <div class="timeline-chart" id="timeline-chart"></div>
+      </section>
+
+      <!-- TOP ATTACKING IPs -->
+      <section class="card card--span-12" id="top-attackers">
+        <div class="card__header">
+          <div class="section-label">
+            <span class="section-label__mark" aria-hidden="true"></span>
+            <h2>Top Attacking IP Addresses</h2>
+          </div>
+          <span class="mono dim card__hint" id="ip-count-hint">— entries</span>
+        </div>
+        <div class="table-wrap">
+          <table class="data-table">
+            <thead>
+              <tr>
+                <th>IP Address</th>
+                <th>Threat Level</th>
+                <th>Attack Count</th>
+                <th>Last Seen</th>
+              </tr>
+            </thead>
+            <tbody id="ip-table-body"></tbody>
+          </table>
+        </div>
+        <p class="empty-note" id="ip-empty-note" hidden>No matching IP addresses for this filter.</p>
+      </section>
+
+    </main>
+
+    <footer class="app-footer">
+      <span>&copy; 2026 SentinelAI-X</span>
+      <span class="brand-footer__sep">&middot;</span>
+      <span>Security Operations Center</span>
+    </footer>
+
+  </div>
+
+</div>
+
+<script src="js/threat-summary.js"></script>
+</body>
+</html>

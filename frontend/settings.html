@@ -1,0 +1,1009 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SentinelAI-X | Settings</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600;700&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/settings.css">
+</head>
+<body>
+
+<div class="noise-overlay"></div>
+
+<div class="app-shell">
+
+  <!-- ===================== SIDEBAR ===================== -->
+  <aside class="sidebar" id="sidebar">
+
+    <div class="sidebar__brand">
+      <div class="brand-mark__logo" aria-hidden="true">
+        <svg viewBox="0 0 48 48" width="30" height="30">
+          <polygon points="24,3 43,12 43,26 24,45 5,26 5,12" fill="none" stroke="#2E8BFF" stroke-width="1.8"/>
+          <polygon points="24,11 36,17 36,25 24,37 12,25 12,17" fill="none" stroke="#57A8FF" stroke-width="1.2" opacity="0.7"/>
+          <circle cx="24" cy="24" r="2.6" fill="#57A8FF"/>
+        </svg>
+      </div>
+      <div class="sidebar__brand-text">
+        <span class="brand-mark__name">SENTINEL<span class="accent">AI-X</span></span>
+        <span class="brand-mark__tag">NETWORK DEFENSE PLATFORM</span>
+      </div>
+    </div>
+
+    <nav class="sidebar__nav" aria-label="Primary">
+      <span class="sidebar__label">Monitor</span>
+      <ul class="nav-list">
+        <li>
+          <a href="dashboard.html" class="nav-link">
+            <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="3" y="3" width="8" height="8"/><rect x="13" y="3" width="8" height="5"/><rect x="13" y="11" width="8" height="10"/><rect x="3" y="14" width="8" height="7"/></svg>
+            <span>Overview</span>
+          </a>
+        </li>
+        <li>
+          <a href="threat-summary.html" class="nav-link">
+            <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M12 3l8 4v5c0 5-3.5 8.5-8 9-4.5-.5-8-4-8-9V7l8-4z"/></svg>
+            <span>Threat Summary</span>
+          </a>
+        </li>
+        <li>
+          <a href="network.html" class="nav-link">
+            <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="12" cy="5" r="2.2"/><circle cx="5" cy="19" r="2.2"/><circle cx="19" cy="19" r="2.2"/><path d="M12 7.2v4M12 11.2L6.3 17M12 11.2L17.7 17"/></svg>
+            <span>Network</span>
+          </a>
+        </li>
+        <li>
+          <a href="live-logs.html" class="nav-link">
+            <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="3" y="4" width="18" height="16" rx="0.5"/><path d="M7 9l3 2-3 2M12 13h5"/></svg>
+            <span>Live Logs</span>
+          </a>
+        </li>
+      </ul>
+
+      <span class="sidebar__label">Manage</span>
+      <ul class="nav-list">
+        <li>
+          <a href="alerts.html" class="nav-link">
+            <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M18 8a6 6 0 10-12 0c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.7 21a2 2 0 01-3.4 0"/></svg>
+            <span>Alerts</span>
+            <span class="nav-badge">3</span>
+          </a>
+        </li>
+        <li>
+          <a href="settings.html" class="nav-link is-active">
+            <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="12" cy="12" r="3"/><path d="M19.4 13a7.6 7.6 0 000-2l2-1.6-2-3.4-2.4 1a7.7 7.7 0 00-1.7-1L15 3h-6l-.3 2.4a7.7 7.7 0 00-1.7 1l-2.4-1-2 3.4L4.6 11a7.6 7.6 0 000 2l-2 1.6 2 3.4 2.4-1a7.7 7.7 0 001.7 1L9 21h6l.3-2.4a7.7 7.7 0 001.7-1l2.4 1 2-3.4-2-1.6z"/></svg>
+            <span>Settings</span>
+          </a>
+        </li>
+      </ul>
+    </nav>
+
+    <div class="sidebar__footer">
+      <button type="button" class="logout-btn" id="logout-btn">
+        <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M9 21H5a2 2 0 01-2-2V5a2 2 0 012-2h4"/><path d="M16 17l5-5-5-5"/><path d="M21 12H9"/></svg>
+        <span>End Session</span>
+      </button>
+    </div>
+
+  </aside>
+
+  <div class="sidebar-backdrop" id="sidebar-backdrop"></div>
+
+  <!-- ===================== MAIN ===================== -->
+  <div class="main">
+
+    <!-- ===================== TOP BAR ===================== -->
+    <header class="topbar">
+      <div class="topbar__left">
+        <button type="button" class="menu-toggle" id="menu-toggle" aria-label="Toggle navigation">
+          <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.8"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+        </button>
+        <div class="section-label">
+          <span class="section-label__mark" aria-hidden="true"></span>
+          <h1>SETTINGS</h1>
+        </div>
+      </div>
+
+      <div class="topbar__right">
+        <div class="topbar__clock" id="topbar-clock">
+          <span class="mono" id="clock-time">00:00:00</span>
+          <span class="dim mono" id="clock-date">—</span>
+        </div>
+
+        <button type="button" class="icon-btn" aria-label="Notifications">
+          <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M18 8a6 6 0 10-12 0c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.7 21a2 2 0 01-3.4 0"/></svg>
+          <span class="icon-btn__dot"></span>
+        </button>
+
+        <div class="agent-chip">
+          <span class="dot dot--ok" aria-hidden="true"></span>
+          <span class="mono">AGT-00417</span>
+        </div>
+      </div>
+    </header>
+
+    <!-- ===================== CONTENT ===================== -->
+    <main class="content">
+
+      <!-- TAB NAV -->
+      <section class="settings-tabbar card--flat">
+        <button type="button" class="settings-tab is-active" data-tab="general">General</button>
+        <button type="button" class="settings-tab" data-tab="idsips">IDS / IPS Engine</button>
+        <button type="button" class="settings-tab" data-tab="ai">AI Detection Engine</button>
+        <button type="button" class="settings-tab" data-tab="database">Database</button>
+        <button type="button" class="settings-tab" data-tab="framework">Framework &amp; System</button>
+        <button type="button" class="settings-tab" data-tab="network">Network</button>
+        <button type="button" class="settings-tab" data-tab="security">Security</button>
+        <button type="button" class="settings-tab" data-tab="logging">Logging &amp; Monitoring</button>
+        <button type="button" class="settings-tab" data-tab="advanced">Advanced</button>
+        <button type="button" class="settings-tab" data-tab="about">About</button>
+      </section>
+
+      <!-- ===================== 1. GENERAL ===================== -->
+      <div class="settings-panel is-active" data-panel="general">
+
+        <section class="card">
+          <div class="card__header">
+            <div class="section-label"><span class="section-label__mark" aria-hidden="true"></span><h2>Application</h2></div>
+          </div>
+
+          <div class="setting-row">
+            <div class="setting-row__info">
+              <span class="setting-row__label">Application Name</span>
+              <span class="setting-row__desc">Display name shown across the platform</span>
+            </div>
+            <div class="setting-row__control">
+              <input type="text" class="text-input" id="general-app-name" value="SentinelAI-X" data-default="SentinelAI-X">
+            </div>
+          </div>
+
+          <div class="setting-row">
+            <div class="setting-row__info">
+              <span class="setting-row__label">System Theme</span>
+              <span class="setting-row__desc">Visual appearance of the console</span>
+            </div>
+            <div class="setting-row__control">
+              <select class="select-input" id="general-theme" data-default="dark-matte">
+                <option value="dark-matte" selected>Dark Matte (Default)</option>
+                <option value="high-contrast">High Contrast</option>
+                <option value="light">Light (Coming Soon)</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="setting-row">
+            <div class="setting-row__info">
+              <span class="setting-row__label">Language</span>
+              <span class="setting-row__desc">Console display language</span>
+            </div>
+            <div class="setting-row__control">
+              <select class="select-input" id="general-language" data-default="en-us">
+                <option value="en-us" selected>English (US)</option>
+                <option value="en-in">English (India)</option>
+                <option value="hi-in">Hindi</option>
+                <option value="es-es">Spanish</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="setting-row">
+            <div class="setting-row__info">
+              <span class="setting-row__label">Time Zone</span>
+              <span class="setting-row__desc">Used for timestamps across logs and alerts</span>
+            </div>
+            <div class="setting-row__control">
+              <select class="select-input" id="general-timezone" data-default="ist">
+                <option value="ist" selected>Asia/Kolkata (IST, UTC+5:30)</option>
+                <option value="utc">UTC</option>
+                <option value="est">America/New_York (EST)</option>
+                <option value="gmt">Europe/London (GMT)</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="setting-row">
+            <div class="setting-row__info">
+              <span class="setting-row__label">Auto Refresh Interval</span>
+              <span class="setting-row__desc">How often live dashboards poll for new data</span>
+            </div>
+            <div class="setting-row__control">
+              <select class="select-input" id="general-refresh" data-default="10">
+                <option value="5">5 seconds</option>
+                <option value="10" selected>10 seconds</option>
+                <option value="30">30 seconds</option>
+                <option value="60">60 seconds</option>
+              </select>
+            </div>
+          </div>
+        </section>
+
+        <section class="card">
+          <div class="card__header">
+            <div class="section-label"><span class="section-label__mark" aria-hidden="true"></span><h2>Notification Preferences</h2></div>
+          </div>
+
+          <div class="setting-row">
+            <div class="setting-row__info">
+              <span class="setting-row__label">Critical Alert Notifications</span>
+              <span class="setting-row__desc">Show a toast when a critical threat is detected</span>
+            </div>
+            <div class="setting-row__control">
+              <label class="switch"><input type="checkbox" id="notif-critical" checked data-default="true"><span class="switch__track"><span class="switch__thumb"></span></span></label>
+            </div>
+          </div>
+
+          <div class="setting-row">
+            <div class="setting-row__info">
+              <span class="setting-row__label">Email Digest</span>
+              <span class="setting-row__desc">Daily summary of threats and system health</span>
+            </div>
+            <div class="setting-row__control">
+              <label class="switch"><input type="checkbox" id="notif-email" data-default="false"><span class="switch__track"><span class="switch__thumb"></span></span></label>
+            </div>
+          </div>
+
+          <div class="setting-row">
+            <div class="setting-row__info">
+              <span class="setting-row__label">Sound Alerts</span>
+              <span class="setting-row__desc">Play an audio cue for high and critical severity events</span>
+            </div>
+            <div class="setting-row__control">
+              <label class="switch"><input type="checkbox" id="notif-sound" checked data-default="true"><span class="switch__track"><span class="switch__thumb"></span></span></label>
+            </div>
+          </div>
+        </section>
+
+      </div>
+
+      <!-- ===================== 2. IDS / IPS ENGINE ===================== -->
+      <div class="settings-panel" data-panel="idsips">
+
+        <section class="card">
+          <div class="card__header">
+            <div class="section-label"><span class="section-label__mark" aria-hidden="true"></span><h2>Engine Toggles</h2></div>
+            <span class="status-pill status-pill--ok"><span class="pulse-dot" aria-hidden="true"></span>Operational</span>
+          </div>
+
+          <div class="setting-row">
+            <div class="setting-row__info">
+              <span class="setting-row__label">Intrusion Detection (IDS)</span>
+              <span class="setting-row__desc">Passive monitoring and alerting on suspicious traffic</span>
+            </div>
+            <div class="setting-row__control">
+              <label class="switch"><input type="checkbox" id="ids-enable" checked data-default="true"><span class="switch__track"><span class="switch__thumb"></span></span></label>
+            </div>
+          </div>
+
+          <div class="setting-row">
+            <div class="setting-row__info">
+              <span class="setting-row__label">Intrusion Prevention (IPS)</span>
+              <span class="setting-row__desc">Actively block traffic matching threat signatures</span>
+            </div>
+            <div class="setting-row__control">
+              <label class="switch"><input type="checkbox" id="ips-enable" checked data-default="true"><span class="switch__track"><span class="switch__thumb"></span></span></label>
+            </div>
+          </div>
+
+          <div class="setting-row">
+            <div class="setting-row__info">
+              <span class="setting-row__label">Real-Time Scanning</span>
+              <span class="setting-row__desc">Continuously inspect packets as they arrive</span>
+            </div>
+            <div class="setting-row__control">
+              <label class="switch"><input type="checkbox" id="ids-realtime" checked data-default="true"><span class="switch__track"><span class="switch__thumb"></span></span></label>
+            </div>
+          </div>
+        </section>
+
+        <section class="card">
+          <div class="card__header">
+            <div class="section-label"><span class="section-label__mark" aria-hidden="true"></span><h2>Detection Sensitivity</h2></div>
+          </div>
+
+          <div class="pill-group" id="sensitivity-group" data-default="medium">
+            <button type="button" class="pill" data-value="low">Low</button>
+            <button type="button" class="pill is-active" data-value="medium">Medium</button>
+            <button type="button" class="pill" data-value="high">High</button>
+            <button type="button" class="pill" data-value="custom">Custom</button>
+          </div>
+
+          <div class="setting-row setting-row--slider" id="sensitivity-custom-row" hidden>
+            <div class="setting-row__info">
+              <span class="setting-row__label">Custom Threshold</span>
+              <span class="setting-row__desc">Fine-tune anomaly sensitivity manually</span>
+            </div>
+            <div class="setting-row__control setting-row__control--wide">
+              <input type="range" class="slider" id="sensitivity-slider" min="0" max="100" value="65" data-default="65">
+              <span class="slider__value mono" id="sensitivity-slider-value">65%</span>
+            </div>
+          </div>
+
+          <div class="setting-row">
+            <div class="setting-row__info">
+              <span class="setting-row__label">Packet Inspection Level</span>
+              <span class="setting-row__desc">Depth of analysis applied to each packet</span>
+            </div>
+            <div class="setting-row__control">
+              <select class="select-input" id="packet-inspection" data-default="deep">
+                <option value="basic">Basic (Header only)</option>
+                <option value="standard">Standard</option>
+                <option value="deep" selected>Deep Packet Inspection</option>
+              </select>
+            </div>
+          </div>
+        </section>
+
+        <section class="card">
+          <div class="card__header">
+            <div class="section-label"><span class="section-label__mark" aria-hidden="true"></span><h2>Signature Updates</h2></div>
+          </div>
+
+          <div class="setting-row">
+            <div class="setting-row__info">
+              <span class="setting-row__label">Update Mode</span>
+              <span class="setting-row__desc">How new threat signatures are retrieved</span>
+            </div>
+            <div class="setting-row__control">
+              <select class="select-input" id="signature-mode" data-default="automatic">
+                <option value="automatic" selected>Automatic (every 4 hours)</option>
+                <option value="manual">Manual</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="setting-row">
+            <div class="setting-row__info">
+              <span class="setting-row__label">Signature Database</span>
+              <span class="setting-row__desc" id="signature-last-updated">Last synced 12 minutes ago &middot; 48,120 signatures loaded</span>
+            </div>
+            <div class="setting-row__control">
+              <button type="button" class="btn-ghost" id="check-signatures-btn">Check for Updates</button>
+            </div>
+          </div>
+        </section>
+
+      </div>
+
+      <!-- ===================== 3. AI / DETECTION ENGINE ===================== -->
+      <div class="settings-panel" data-panel="ai">
+
+        <section class="card">
+          <div class="card__header">
+            <div class="section-label"><span class="section-label__mark" aria-hidden="true"></span><h2>Model Status</h2></div>
+            <span class="status-pill status-pill--ok"><span class="pulse-dot" aria-hidden="true"></span>Active</span>
+          </div>
+          <ul class="status-list">
+            <li class="status-row"><span class="status-row__key">Model</span><span class="status-row__val mono">SNX-Detect v3.2 (Transformer-based)</span></li>
+            <li class="status-row"><span class="status-row__key">Last Trained</span><span class="status-row__val mono dim">6 days ago</span></li>
+            <li class="status-row"><span class="status-row__key">Accuracy (validation set)</span><span class="status-row__val mono">97.4%</span></li>
+          </ul>
+        </section>
+
+        <section class="card">
+          <div class="card__header">
+            <div class="section-label"><span class="section-label__mark" aria-hidden="true"></span><h2>Detection Tuning</h2></div>
+          </div>
+
+          <div class="setting-row setting-row--slider">
+            <div class="setting-row__info">
+              <span class="setting-row__label">Confidence Threshold</span>
+              <span class="setting-row__desc">Minimum confidence before an event is flagged as a threat</span>
+            </div>
+            <div class="setting-row__control setting-row__control--wide">
+              <input type="range" class="slider" id="ai-confidence" min="50" max="99" value="82" data-default="82">
+              <span class="slider__value mono" id="ai-confidence-value">82%</span>
+            </div>
+          </div>
+
+          <div class="setting-row">
+            <div class="setting-row__info">
+              <span class="setting-row__label">Threat Classification</span>
+              <span class="setting-row__desc">Balance between false positives and missed detections</span>
+            </div>
+            <div class="setting-row__control">
+              <div class="pill-group" id="classification-group" data-default="balanced">
+                <button type="button" class="pill" data-value="strict">Strict</button>
+                <button type="button" class="pill is-active" data-value="balanced">Balanced</button>
+                <button type="button" class="pill" data-value="lenient">Lenient</button>
+              </div>
+            </div>
+          </div>
+
+          <div class="setting-row">
+            <div class="setting-row__info">
+              <span class="setting-row__label">Prediction Mode</span>
+              <span class="setting-row__desc">How inferences are scheduled against traffic</span>
+            </div>
+            <div class="setting-row__control">
+              <select class="select-input" id="ai-prediction-mode" data-default="realtime">
+                <option value="realtime" selected>Real-time</option>
+                <option value="batch">Batch (every 5 min)</option>
+                <option value="hybrid">Hybrid</option>
+              </select>
+            </div>
+          </div>
+        </section>
+
+        <section class="card">
+          <div class="card__header">
+            <div class="section-label"><span class="section-label__mark" aria-hidden="true"></span><h2>Feature Extraction</h2></div>
+          </div>
+
+          <div class="setting-row">
+            <div class="setting-row__info"><span class="setting-row__label">Deep Packet Features</span></div>
+            <div class="setting-row__control"><label class="switch"><input type="checkbox" id="feat-packet" checked data-default="true"><span class="switch__track"><span class="switch__thumb"></span></span></label></div>
+          </div>
+          <div class="setting-row">
+            <div class="setting-row__info"><span class="setting-row__label">Flow-Based Features</span></div>
+            <div class="setting-row__control"><label class="switch"><input type="checkbox" id="feat-flow" checked data-default="true"><span class="switch__track"><span class="switch__thumb"></span></span></label></div>
+          </div>
+          <div class="setting-row">
+            <div class="setting-row__info"><span class="setting-row__label">Behavioral Features</span></div>
+            <div class="setting-row__control"><label class="switch"><input type="checkbox" id="feat-behavioral" data-default="false"><span class="switch__track"><span class="switch__thumb"></span></span></label></div>
+          </div>
+        </section>
+
+        <section class="card setting-card--full">
+          <div class="card__header">
+            <div class="section-label"><span class="section-label__mark" aria-hidden="true"></span><h2>Training Mode</h2></div>
+          </div>
+          <div class="setting-row">
+            <div class="setting-row__info">
+              <span class="setting-row__label">Enable Training Mode</span>
+              <span class="setting-row__desc">Model learns from analyst feedback instead of only serving predictions. May increase CPU usage.</span>
+            </div>
+            <div class="setting-row__control">
+              <label class="switch"><input type="checkbox" id="ai-training-mode" data-default="false"><span class="switch__track"><span class="switch__thumb"></span></span></label>
+            </div>
+          </div>
+        </section>
+
+      </div>
+
+      <!-- ===================== 4. DATABASE ===================== -->
+      <div class="settings-panel" data-panel="database">
+
+        <section class="card">
+          <div class="card__header">
+            <div class="section-label"><span class="section-label__mark" aria-hidden="true"></span><h2>Database Status</h2></div>
+            <span class="status-pill status-pill--ok"><span class="pulse-dot" aria-hidden="true"></span>Connected</span>
+          </div>
+          <ul class="status-list">
+            <li class="status-row"><span class="status-row__key">Database Type</span><span class="status-row__val mono">PostgreSQL 15.3 (embedded)</span></li>
+            <li class="status-row"><span class="status-row__key">Host</span><span class="status-row__val mono">127.0.0.1:5432</span></li>
+          </ul>
+
+          <div class="setting-row setting-row--stacked">
+            <div class="setting-row__info">
+              <span class="setting-row__label">Storage Usage</span>
+              <span class="setting-row__desc mono">4.2 GB / 10 GB</span>
+            </div>
+            <div class="gauge-track"><div class="gauge-fill gauge-fill--blue" style="width:42%"></div></div>
+          </div>
+        </section>
+
+        <section class="card">
+          <div class="card__header">
+            <div class="section-label"><span class="section-label__mark" aria-hidden="true"></span><h2>Backup</h2></div>
+          </div>
+
+          <div class="setting-row">
+            <div class="setting-row__info">
+              <span class="setting-row__label">Backup Schedule</span>
+              <span class="setting-row__desc">Automatic snapshots of the alert and log database</span>
+            </div>
+            <div class="setting-row__control">
+              <select class="select-input" id="backup-schedule" data-default="daily">
+                <option value="daily" selected>Daily</option>
+                <option value="weekly">Weekly</option>
+                <option value="monthly">Monthly</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="setting-row">
+            <div class="setting-row__info">
+              <span class="setting-row__label">Last Backup</span>
+              <span class="setting-row__desc mono dim" id="last-backup-note">Today, 03:00 AM &middot; 3.9 GB</span>
+            </div>
+            <div class="setting-row__control">
+              <button type="button" class="btn-ghost" id="backup-now-btn">Backup Now</button>
+            </div>
+          </div>
+        </section>
+
+        <section class="card setting-card--full">
+          <div class="card__header">
+            <div class="section-label"><span class="section-label__mark" aria-hidden="true"></span><h2>Data Management</h2></div>
+          </div>
+
+          <div class="setting-row">
+            <div class="setting-row__info">
+              <span class="setting-row__label">Export Logs</span>
+              <span class="setting-row__desc">Download the full log archive as CSV</span>
+            </div>
+            <div class="setting-row__control">
+              <button type="button" class="btn-ghost" id="export-logs-btn">Export Logs</button>
+            </div>
+          </div>
+
+          <div class="setting-row">
+            <div class="setting-row__info">
+              <span class="setting-row__label">Import Data</span>
+              <span class="setting-row__desc">Restore alerts and logs from a previous export</span>
+            </div>
+            <div class="setting-row__control">
+              <label class="btn-ghost btn-file">
+                Import Data
+                <input type="file" id="import-data-input" hidden>
+              </label>
+            </div>
+          </div>
+
+          <div class="setting-row">
+            <div class="setting-row__info">
+              <span class="setting-row__label">Clear Database</span>
+              <span class="setting-row__desc">Permanently deletes all stored alerts, logs, and threat history</span>
+            </div>
+            <div class="setting-row__control">
+              <button type="button" class="btn-danger" id="clear-db-btn">Clear Database</button>
+            </div>
+          </div>
+        </section>
+
+      </div>
+
+      <!-- ===================== 5. FRAMEWORK & SYSTEM ===================== -->
+      <div class="settings-panel" data-panel="framework">
+
+        <section class="card">
+          <div class="card__header">
+            <div class="section-label"><span class="section-label__mark" aria-hidden="true"></span><h2>Version Information</h2></div>
+          </div>
+          <ul class="status-list">
+            <li class="status-row"><span class="status-row__key">Framework Version</span><span class="status-row__val mono">SentinelAI-X Core v2.4.1</span></li>
+            <li class="status-row"><span class="status-row__key">System Version</span><span class="status-row__val mono">Build 20260712-stable</span></li>
+            <li class="status-row"><span class="status-row__key">Update Manager</span><span class="status-row__val"><span class="dot dot--ok"></span>Up to date</span></li>
+          </ul>
+          <div class="setting-row">
+            <div class="setting-row__info">
+              <span class="setting-row__label">Check for Platform Updates</span>
+            </div>
+            <div class="setting-row__control">
+              <button type="button" class="btn-ghost" id="check-platform-update-btn">Check Now</button>
+            </div>
+          </div>
+        </section>
+
+        <section class="card">
+          <div class="card__header">
+            <div class="section-label"><span class="section-label__mark" aria-hidden="true"></span><h2>Module Manager</h2></div>
+          </div>
+          <div class="module-list" id="module-list"></div>
+        </section>
+
+        <section class="card setting-card--full">
+          <div class="card__header">
+            <div class="section-label"><span class="section-label__mark" aria-hidden="true"></span><h2>Service Status &amp; Background Processes</h2></div>
+          </div>
+          <div class="table-wrap">
+            <table class="data-table">
+              <thead><tr><th>Service</th><th>Status</th><th>CPU</th><th>Memory</th></tr></thead>
+              <tbody id="service-table-body"></tbody>
+            </table>
+          </div>
+        </section>
+
+      </div>
+
+      <!-- ===================== 6. NETWORK CONFIGURATION ===================== -->
+      <div class="settings-panel" data-panel="network">
+
+        <section class="card">
+          <div class="card__header">
+            <div class="section-label"><span class="section-label__mark" aria-hidden="true"></span><h2>Interface Selection</h2></div>
+          </div>
+
+          <div class="setting-row">
+            <div class="setting-row__info">
+              <span class="setting-row__label">Monitored Interface</span>
+              <span class="setting-row__desc">Primary interface for traffic monitoring</span>
+            </div>
+            <div class="setting-row__control">
+              <div class="pill-group" id="interface-group" data-default="eth0">
+                <button type="button" class="pill is-active" data-value="eth0">eth0</button>
+                <button type="button" class="pill" data-value="wlan0">wlan0</button>
+                <button type="button" class="pill" data-value="tap0">tap0</button>
+              </div>
+            </div>
+          </div>
+
+          <div class="setting-row">
+            <div class="setting-row__info">
+              <span class="setting-row__label">Capture Interface</span>
+              <span class="setting-row__desc">Interface used by the packet capture engine</span>
+            </div>
+            <div class="setting-row__control">
+              <select class="select-input" id="capture-interface" data-default="eth0">
+                <option value="eth0" selected>eth0</option>
+                <option value="wlan0">wlan0</option>
+                <option value="tap0">tap0</option>
+                <option value="any">Any</option>
+              </select>
+            </div>
+          </div>
+        </section>
+
+        <section class="card">
+          <div class="card__header">
+            <div class="section-label"><span class="section-label__mark" aria-hidden="true"></span><h2>DNS &amp; Gateway</h2></div>
+          </div>
+
+          <div class="setting-row">
+            <div class="setting-row__info"><span class="setting-row__label">Primary DNS</span></div>
+            <div class="setting-row__control"><input type="text" class="text-input" id="dns-primary" value="1.1.1.1" data-default="1.1.1.1"></div>
+          </div>
+          <div class="setting-row">
+            <div class="setting-row__info"><span class="setting-row__label">Secondary DNS</span></div>
+            <div class="setting-row__control"><input type="text" class="text-input" id="dns-secondary" value="8.8.8.8" data-default="8.8.8.8"></div>
+          </div>
+          <div class="setting-row">
+            <div class="setting-row__info"><span class="setting-row__label">Gateway Address</span></div>
+            <div class="setting-row__control"><input type="text" class="text-input" id="gateway-address" value="10.0.4.1" data-default="10.0.4.1"></div>
+          </div>
+        </section>
+
+        <section class="card setting-card--full">
+          <div class="card__header">
+            <div class="section-label"><span class="section-label__mark" aria-hidden="true"></span><h2>Port Monitoring</h2></div>
+          </div>
+          <div class="setting-row">
+            <div class="setting-row__info">
+              <span class="setting-row__label">Enable Port Monitoring</span>
+              <span class="setting-row__desc">Track connection attempts on the specified ports</span>
+            </div>
+            <div class="setting-row__control">
+              <label class="switch"><input type="checkbox" id="port-monitoring" checked data-default="true"><span class="switch__track"><span class="switch__thumb"></span></span></label>
+            </div>
+          </div>
+          <div class="setting-row">
+            <div class="setting-row__info">
+              <span class="setting-row__label">Monitored Ports</span>
+              <span class="setting-row__desc">Comma-separated list</span>
+            </div>
+            <div class="setting-row__control">
+              <input type="text" class="text-input" id="monitored-ports" value="21, 22, 80, 443, 3389" data-default="21, 22, 80, 443, 3389">
+            </div>
+          </div>
+        </section>
+
+      </div>
+
+      <!-- ===================== 7. SECURITY ===================== -->
+      <div class="settings-panel" data-panel="security">
+
+        <section class="card">
+          <div class="card__header">
+            <div class="section-label"><span class="section-label__mark" aria-hidden="true"></span><h2>Password</h2></div>
+          </div>
+          <div class="setting-row">
+            <div class="setting-row__info"><span class="setting-row__label">Current Password</span></div>
+            <div class="setting-row__control"><input type="password" class="text-input" id="password-current" placeholder="Enter current password"></div>
+          </div>
+          <div class="setting-row">
+            <div class="setting-row__info"><span class="setting-row__label">New Password</span></div>
+            <div class="setting-row__control"><input type="password" class="text-input" id="password-new" placeholder="Enter new password"></div>
+          </div>
+          <div class="setting-row">
+            <div class="setting-row__info"></div>
+            <div class="setting-row__control"><button type="button" class="btn-ghost" id="update-password-btn">Update Password</button></div>
+          </div>
+        </section>
+
+        <section class="card">
+          <div class="card__header">
+            <div class="section-label"><span class="section-label__mark" aria-hidden="true"></span><h2>Access Control</h2></div>
+          </div>
+          <div class="setting-row">
+            <div class="setting-row__info">
+              <span class="setting-row__label">Session Timeout</span>
+            </div>
+            <div class="setting-row__control">
+              <select class="select-input" id="session-timeout" data-default="30">
+                <option value="15">15 minutes</option>
+                <option value="30" selected>30 minutes</option>
+                <option value="60">1 hour</option>
+                <option value="0">Never</option>
+              </select>
+            </div>
+          </div>
+          <div class="setting-row">
+            <div class="setting-row__info">
+              <span class="setting-row__label">IP Whitelist Restriction</span>
+              <span class="setting-row__desc">Only allow console access from listed addresses</span>
+            </div>
+            <div class="setting-row__control">
+              <label class="switch"><input type="checkbox" id="ip-whitelist" data-default="false"><span class="switch__track"><span class="switch__thumb"></span></span></label>
+            </div>
+          </div>
+          <div class="setting-row">
+            <div class="setting-row__info">
+              <span class="setting-row__label">Encryption Standard</span>
+            </div>
+            <div class="setting-row__control">
+              <select class="select-input" id="encryption-standard" data-default="aes256">
+                <option value="aes256" selected>AES-256</option>
+                <option value="aes128">AES-128</option>
+                <option value="chacha20">ChaCha20</option>
+              </select>
+            </div>
+          </div>
+        </section>
+
+        <section class="card">
+          <div class="card__header">
+            <div class="section-label"><span class="section-label__mark" aria-hidden="true"></span><h2>Security Policies</h2></div>
+          </div>
+          <div class="setting-row">
+            <div class="setting-row__info"><span class="setting-row__label">Enforce Two-Factor Authentication</span></div>
+            <div class="setting-row__control"><label class="switch"><input type="checkbox" id="policy-2fa" checked data-default="true"><span class="switch__track"><span class="switch__thumb"></span></span></label></div>
+          </div>
+          <div class="setting-row">
+            <div class="setting-row__info"><span class="setting-row__label">Require Strong Passwords</span></div>
+            <div class="setting-row__control"><label class="switch"><input type="checkbox" id="policy-strong-pw" checked data-default="true"><span class="switch__track"><span class="switch__thumb"></span></span></label></div>
+          </div>
+          <div class="setting-row">
+            <div class="setting-row__info"><span class="setting-row__label">Auto-Lock Inactive Sessions</span></div>
+            <div class="setting-row__control"><label class="switch"><input type="checkbox" id="policy-autolock" checked data-default="true"><span class="switch__track"><span class="switch__thumb"></span></span></label></div>
+          </div>
+        </section>
+
+        <section class="card setting-card--full">
+          <div class="card__header">
+            <div class="section-label"><span class="section-label__mark" aria-hidden="true"></span><h2>User Permissions</h2></div>
+          </div>
+          <div class="table-wrap">
+            <table class="data-table">
+              <thead><tr><th>Role</th><th>View</th><th>Edit</th><th>Delete</th></tr></thead>
+              <tbody id="permissions-table-body"></tbody>
+            </table>
+          </div>
+        </section>
+
+      </div>
+
+      <!-- ===================== 8. LOGGING & MONITORING ===================== -->
+      <div class="settings-panel" data-panel="logging">
+
+        <section class="card">
+          <div class="card__header">
+            <div class="section-label"><span class="section-label__mark" aria-hidden="true"></span><h2>Log Level</h2></div>
+          </div>
+          <div class="pill-group" id="loglevel-group" data-default="info">
+            <button type="button" class="pill is-active" data-value="info">INFO</button>
+            <button type="button" class="pill" data-value="warning">WARNING</button>
+            <button type="button" class="pill" data-value="critical">CRITICAL</button>
+          </div>
+        </section>
+
+        <section class="card">
+          <div class="card__header">
+            <div class="section-label"><span class="section-label__mark" aria-hidden="true"></span><h2>Retention</h2></div>
+          </div>
+          <div class="setting-row">
+            <div class="setting-row__info"><span class="setting-row__label">Log Retention Period</span></div>
+            <div class="setting-row__control">
+              <select class="select-input" id="log-retention" data-default="30">
+                <option value="7">7 days</option>
+                <option value="30" selected>30 days</option>
+                <option value="90">90 days</option>
+                <option value="365">1 year</option>
+              </select>
+            </div>
+          </div>
+          <div class="setting-row">
+            <div class="setting-row__info">
+              <span class="setting-row__label">Auto Cleanup</span>
+              <span class="setting-row__desc">Automatically purge logs past the retention period</span>
+            </div>
+            <div class="setting-row__control">
+              <label class="switch"><input type="checkbox" id="log-autocleanup" checked data-default="true"><span class="switch__track"><span class="switch__thumb"></span></span></label>
+            </div>
+          </div>
+        </section>
+
+        <section class="card setting-card--full">
+          <div class="card__header">
+            <div class="section-label"><span class="section-label__mark" aria-hidden="true"></span><h2>Live Monitoring</h2></div>
+          </div>
+          <div class="setting-row">
+            <div class="setting-row__info"><span class="setting-row__label">Real-Time Terminal Streaming</span></div>
+            <div class="setting-row__control"><label class="switch"><input type="checkbox" id="monitor-terminal" checked data-default="true"><span class="switch__track"><span class="switch__thumb"></span></span></label></div>
+          </div>
+          <div class="setting-row">
+            <div class="setting-row__info"><span class="setting-row__label">Desktop Notifications</span></div>
+            <div class="setting-row__control"><label class="switch"><input type="checkbox" id="monitor-desktop" data-default="false"><span class="switch__track"><span class="switch__thumb"></span></span></label></div>
+          </div>
+          <div class="setting-row">
+            <div class="setting-row__info">
+              <span class="setting-row__label">Export Logs</span>
+              <span class="setting-row__desc">Download the current log buffer as CSV</span>
+            </div>
+            <div class="setting-row__control">
+              <button type="button" class="btn-ghost" id="export-logs-btn-2">Export Logs</button>
+            </div>
+          </div>
+        </section>
+
+      </div>
+
+      <!-- ===================== 9. ADVANCED ===================== -->
+      <div class="settings-panel" data-panel="advanced">
+
+        <section class="card">
+          <div class="card__header">
+            <div class="section-label"><span class="section-label__mark" aria-hidden="true"></span><h2>Developer</h2></div>
+          </div>
+          <div class="setting-row">
+            <div class="setting-row__info">
+              <span class="setting-row__label">Developer Mode</span>
+              <span class="setting-row__desc">Exposes internal API request/response inspection</span>
+            </div>
+            <div class="setting-row__control"><label class="switch"><input type="checkbox" id="dev-mode" data-default="false"><span class="switch__track"><span class="switch__thumb"></span></span></label></div>
+          </div>
+          <div class="setting-row">
+            <div class="setting-row__info">
+              <span class="setting-row__label">Debug Mode</span>
+              <span class="setting-row__desc">Verbose logging for troubleshooting</span>
+            </div>
+            <div class="setting-row__control"><label class="switch"><input type="checkbox" id="debug-mode" data-default="false"><span class="switch__track"><span class="switch__thumb"></span></span></label></div>
+          </div>
+        </section>
+
+        <section class="card">
+          <div class="card__header">
+            <div class="section-label"><span class="section-label__mark" aria-hidden="true"></span><h2>Performance Tuning</h2></div>
+          </div>
+          <div class="setting-row setting-row--slider">
+            <div class="setting-row__info">
+              <span class="setting-row__label">Worker Threads</span>
+              <span class="setting-row__desc">Threads allocated to packet processing</span>
+            </div>
+            <div class="setting-row__control setting-row__control--wide">
+              <input type="range" class="slider" id="worker-threads" min="1" max="16" value="8" data-default="8">
+              <span class="slider__value mono" id="worker-threads-value">8</span>
+            </div>
+          </div>
+          <div class="setting-row">
+            <div class="setting-row__info"><span class="setting-row__label">Priority Profile</span></div>
+            <div class="setting-row__control">
+              <select class="select-input" id="priority-profile" data-default="balanced">
+                <option value="balanced" selected>Balanced</option>
+                <option value="performance">Performance</option>
+                <option value="power-saving">Power Saving</option>
+              </select>
+            </div>
+          </div>
+        </section>
+
+        <section class="card">
+          <div class="card__header">
+            <div class="section-label"><span class="section-label__mark" aria-hidden="true"></span><h2>Cache</h2></div>
+          </div>
+          <div class="setting-row setting-row--stacked">
+            <div class="setting-row__info">
+              <span class="setting-row__label">Cache Usage</span>
+              <span class="setting-row__desc mono">612 MB / 2 GB</span>
+            </div>
+            <div class="gauge-track"><div class="gauge-fill gauge-fill--blue" style="width:30%"></div></div>
+          </div>
+          <div class="setting-row">
+            <div class="setting-row__info"></div>
+            <div class="setting-row__control"><button type="button" class="btn-ghost" id="clear-cache-btn">Clear Cache</button></div>
+          </div>
+        </section>
+
+        <section class="card setting-card--full">
+          <div class="card__header">
+            <div class="section-label"><span class="section-label__mark" aria-hidden="true"></span><h2>Diagnostics &amp; Reset</h2></div>
+          </div>
+          <div class="setting-row">
+            <div class="setting-row__info">
+              <span class="setting-row__label">System Diagnostics</span>
+              <span class="setting-row__desc">Run a full self-check across CPU, memory, disk, and network</span>
+            </div>
+            <div class="setting-row__control">
+              <button type="button" class="btn-ghost" id="run-diagnostics-btn">Run Diagnostics</button>
+            </div>
+          </div>
+          <div class="diagnostics-result" id="diagnostics-result" hidden></div>
+          <div class="setting-row">
+            <div class="setting-row__info">
+              <span class="setting-row__label">Reset Configuration</span>
+              <span class="setting-row__desc">Restores every setting on this page to factory defaults</span>
+            </div>
+            <div class="setting-row__control">
+              <button type="button" class="btn-danger" id="reset-config-btn">Reset Configuration</button>
+            </div>
+          </div>
+        </section>
+
+      </div>
+
+      <!-- ===================== 10. ABOUT ===================== -->
+      <div class="settings-panel" data-panel="about">
+
+        <section class="card">
+          <div class="card__header">
+            <div class="section-label"><span class="section-label__mark" aria-hidden="true"></span><h2>SentinelAI-X</h2></div>
+          </div>
+          <ul class="status-list">
+            <li class="status-row"><span class="status-row__key">Version</span><span class="status-row__val mono">v2.4.1-stable</span></li>
+            <li class="status-row"><span class="status-row__key">Build Number</span><span class="status-row__val mono">20260712</span></li>
+            <li class="status-row"><span class="status-row__key">License</span><span class="status-row__val">Academic Use License</span></li>
+          </ul>
+        </section>
+
+        <section class="card">
+          <div class="card__header">
+            <div class="section-label"><span class="section-label__mark" aria-hidden="true"></span><h2>Team</h2></div>
+          </div>
+          <p class="modal__text">SentinelAI-X is developed by Ankush as a final year B.Tech Cybersecurity project, focused on AI-powered network intrusion detection and monitoring.</p>
+        </section>
+
+        <section class="card setting-card--full">
+          <div class="card__header">
+            <div class="section-label"><span class="section-label__mark" aria-hidden="true"></span><h2>Documentation</h2></div>
+          </div>
+          <ul class="doc-links">
+            <li><a href="#" class="link-muted">User Guide</a></li>
+            <li><a href="#" class="link-muted">API Reference</a></li>
+            <li><a href="#" class="link-muted">GitHub Repository</a></li>
+            <li><a href="#" class="link-muted">Release Notes</a></li>
+          </ul>
+        </section>
+
+      </div>
+
+    </main>
+
+    <!-- STICKY SAVE BAR -->
+    <div class="save-bar">
+      <span class="mono dim save-bar__status" id="save-bar-status"></span>
+      <button type="button" class="btn-ghost" id="reset-defaults-btn">Reset to Defaults</button>
+      <button type="button" class="btn-save" id="save-settings-btn">Save Changes</button>
+    </div>
+
+    <footer class="app-footer">
+      <span>&copy; 2026 SentinelAI-X</span>
+      <span class="brand-footer__sep">&middot;</span>
+      <span>Security Operations Center</span>
+    </footer>
+
+  </div>
+
+</div>
+
+<!-- ===================== TOAST NOTIFICATIONS ===================== -->
+<div class="toast-stack" id="toast-stack" aria-live="polite"></div>
+
+<!-- ===================== CONFIRM DIALOG ===================== -->
+<div class="modal-backdrop" id="confirm-modal-backdrop" hidden>
+  <div class="modal" role="alertdialog" aria-modal="true" aria-labelledby="confirm-modal-title">
+    <div class="modal__header">
+      <div class="section-label"><span class="section-label__mark" aria-hidden="true"></span><h2 id="confirm-modal-title">Confirm Action</h2></div>
+      <button type="button" class="modal__close" id="confirm-modal-close" aria-label="Close">
+        <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.9"><line x1="5" y1="5" x2="19" y2="19"/><line x1="19" y1="5" x2="5" y2="19"/></svg>
+      </button>
+    </div>
+    <p class="modal__text" id="confirm-modal-text"></p>
+    <div class="modal__actions">
+      <button type="button" class="btn-action" id="confirm-modal-cancel">Cancel</button>
+      <button type="button" class="btn-action btn-action--danger" id="confirm-modal-confirm">Confirm</button>
+    </div>
+  </div>
+</div>
+
+<script src="js/settings.js"></script>
+</body>
+</html>

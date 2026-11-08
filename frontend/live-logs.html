@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SentinelAI-X | Live Logs</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600;700&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/live-logs.css">
+</head>
+<body>
+
+<div class="noise-overlay"></div>
+
+<div class="app-shell">
+
+  <!-- ===================== SIDEBAR ===================== -->
+  <aside class="sidebar" id="sidebar">
+
+    <div class="sidebar__brand">
+      <div class="brand-mark__logo" aria-hidden="true">
+        <svg viewBox="0 0 48 48" width="30" height="30">
+          <polygon points="24,3 43,12 43,26 24,45 5,26 5,12" fill="none" stroke="#2E8BFF" stroke-width="1.8"/>
+          <polygon points="24,11 36,17 36,25 24,37 12,25 12,17" fill="none" stroke="#57A8FF" stroke-width="1.2" opacity="0.7"/>
+          <circle cx="24" cy="24" r="2.6" fill="#57A8FF"/>
+        </svg>
+      </div>
+      <div class="sidebar__brand-text">
+        <span class="brand-mark__name">SENTINEL<span class="accent">AI-X</span></span>
+        <span class="brand-mark__tag">NETWORK DEFENSE PLATFORM</span>
+      </div>
+    </div>
+
+    <nav class="sidebar__nav" aria-label="Primary">
+      <span class="sidebar__label">Monitor</span>
+      <ul class="nav-list">
+        <li>
+          <a href="dashboard.html" class="nav-link">
+            <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="3" y="3" width="8" height="8"/><rect x="13" y="3" width="8" height="5"/><rect x="13" y="11" width="8" height="10"/><rect x="3" y="14" width="8" height="7"/></svg>
+            <span>Overview</span>
+          </a>
+        </li>
+        <li>
+          <a href="threat-summary.html" class="nav-link">
+            <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M12 3l8 4v5c0 5-3.5 8.5-8 9-4.5-.5-8-4-8-9V7l8-4z"/></svg>
+            <span>Threat Summary</span>
+          </a>
+        </li>
+        <li>
+          <a href="network.html" class="nav-link">
+            <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="12" cy="5" r="2.2"/><circle cx="5" cy="19" r="2.2"/><circle cx="19" cy="19" r="2.2"/><path d="M12 7.2v4M12 11.2L6.3 17M12 11.2L17.7 17"/></svg>
+            <span>Network</span>
+          </a>
+        </li>
+        <li>
+          <a href="live-logs.html" class="nav-link is-active">
+            <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="3" y="4" width="18" height="16" rx="0.5"/><path d="M7 9l3 2-3 2M12 13h5"/></svg>
+            <span>Live Logs</span>
+          </a>
+        </li>
+      </ul>
+
+      <span class="sidebar__label">Manage</span>
+      <ul class="nav-list">
+        <li>
+          <a href="alerts.html" class="nav-link">
+            <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M18 8a6 6 0 10-12 0c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.7 21a2 2 0 01-3.4 0"/></svg>
+            <span>Alerts</span>
+            <span class="nav-badge">3</span>
+          </a>
+        </li>
+        <li>
+          <a href="settings.html" class="nav-link">
+            <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="12" cy="12" r="3"/><path d="M19.4 13a7.6 7.6 0 000-2l2-1.6-2-3.4-2.4 1a7.7 7.7 0 00-1.7-1L15 3h-6l-.3 2.4a7.7 7.7 0 00-1.7 1l-2.4-1-2 3.4L4.6 11a7.6 7.6 0 000 2l-2 1.6 2 3.4 2.4-1a7.7 7.7 0 001.7 1L9 21h6l.3-2.4a7.7 7.7 0 001.7-1l2.4 1 2-3.4-2-1.6z"/></svg>
+            <span>Settings</span>
+          </a>
+        </li>
+      </ul>
+    </nav>
+
+    <div class="sidebar__footer">
+      <button type="button" class="logout-btn" id="logout-btn">
+        <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M9 21H5a2 2 0 01-2-2V5a2 2 0 012-2h4"/><path d="M16 17l5-5-5-5"/><path d="M21 12H9"/></svg>
+        <span>End Session</span>
+      </button>
+    </div>
+
+  </aside>
+
+  <div class="sidebar-backdrop" id="sidebar-backdrop"></div>
+
+  <!-- ===================== MAIN ===================== -->
+  <div class="main">
+
+    <!-- ===================== TOP BAR ===================== -->
+    <header class="topbar">
+      <div class="topbar__left">
+        <button type="button" class="menu-toggle" id="menu-toggle" aria-label="Toggle navigation">
+          <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.8"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+        </button>
+        <div class="section-label">
+          <span class="section-label__mark" aria-hidden="true"></span>
+          <h1>LIVE LOGS</h1>
+        </div>
+      </div>
+
+      <div class="topbar__right">
+        <div class="topbar__clock" id="topbar-clock">
+          <span class="mono" id="clock-time">00:00:00</span>
+          <span class="dim mono" id="clock-date">—</span>
+        </div>
+
+        <button type="button" class="icon-btn" aria-label="Notifications">
+          <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M18 8a6 6 0 10-12 0c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.7 21a2 2 0 01-3.4 0"/></svg>
+          <span class="icon-btn__dot"></span>
+        </button>
+
+        <div class="agent-chip">
+          <span class="dot dot--ok" aria-hidden="true"></span>
+          <span class="mono">AGT-00417</span>
+        </div>
+      </div>
+    </header>
+
+    <!-- ===================== CONTENT ===================== -->
+    <main class="content">
+
+      <!-- STAT CARDS -->
+      <section class="card stat-card" id="stat-total">
+        <div class="stat-card__icon stat-card__icon--blue" aria-hidden="true">
+          <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.7"><rect x="3" y="4" width="18" height="16" rx="0.5"/><path d="M7 9l3 2-3 2M12 13h5"/></svg>
+        </div>
+        <div class="stat-card__body">
+          <span class="stat-card__value mono" id="stat-total-value">0</span>
+          <span class="stat-card__label">Total Logs</span>
+        </div>
+      </section>
+
+      <section class="card stat-card" id="stat-critical">
+        <div class="stat-card__icon stat-card__icon--danger" aria-hidden="true">
+          <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M12 9v4M12 17h.01"/><path d="M10.3 3.9L2.9 17a2 2 0 001.7 3h14.8a2 2 0 001.7-3L13.7 3.9a2 2 0 00-3.4 0z"/></svg>
+        </div>
+        <div class="stat-card__body">
+          <span class="stat-card__value mono" id="stat-critical-value">0</span>
+          <span class="stat-card__label">Critical Events</span>
+        </div>
+      </section>
+
+      <section class="card stat-card" id="stat-blocked">
+        <div class="stat-card__icon stat-card__icon--warning" aria-hidden="true">
+          <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.7"><circle cx="12" cy="12" r="9"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+        </div>
+        <div class="stat-card__body">
+          <span class="stat-card__value mono" id="stat-blocked-value">0</span>
+          <span class="stat-card__label">Blocked Requests</span>
+        </div>
+      </section>
+
+      <section class="card stat-card" id="stat-connections">
+        <div class="stat-card__icon stat-card__icon--success" aria-hidden="true">
+          <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.7"><circle cx="12" cy="5" r="2.2"/><circle cx="5" cy="19" r="2.2"/><circle cx="19" cy="19" r="2.2"/><path d="M12 7.2v4M12 11.2L6.3 17M12 11.2L17.7 17"/></svg>
+        </div>
+        <div class="stat-card__body">
+          <span class="stat-card__value mono" id="stat-connections-value">0</span>
+          <span class="stat-card__label">Active Connections</span>
+        </div>
+      </section>
+
+      <!-- TOOLBAR -->
+      <section class="toolbar card--flat">
+        <div class="search-field">
+          <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="11" cy="11" r="7"/><line x1="21" y1="21" x2="16.2" y2="16.2"/></svg>
+          <input type="text" id="log-search" placeholder="Search by IP address, event, or keyword…" autocomplete="off" spellcheck="false">
+        </div>
+
+        <div class="filter-chips" id="filter-chips" role="group" aria-label="Filter by severity">
+          <button type="button" class="chip is-active" data-level="all">All</button>
+          <button type="button" class="chip chip--blue" data-level="info">Info</button>
+          <button type="button" class="chip chip--warning" data-level="warning">Warning</button>
+          <button type="button" class="chip chip--danger" data-level="critical">Critical</button>
+          <button type="button" class="chip chip--success" data-level="success">Success</button>
+        </div>
+      </section>
+
+      <section class="toolbar toolbar--controls card--flat">
+        <button type="button" class="btn-ghost btn-ghost--wide" id="pause-btn">
+          <svg class="icon-pause" viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="6" y="4" width="4" height="16"/><rect x="14" y="4" width="4" height="16"/></svg>
+          <svg class="icon-resume" viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="1.8" style="display:none"><polygon points="6,4 20,12 6,20"/></svg>
+          <span id="pause-btn-label">Pause Logs</span>
+        </button>
+        <button type="button" class="btn-ghost btn-ghost--wide" id="clear-btn">
+          <svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M4 7h16"/><path d="M9 7V4h6v3"/><path d="M6 7l1 13h10l1-13"/></svg>
+          Clear Logs
+        </button>
+        <button type="button" class="btn-ghost btn-ghost--wide" id="export-btn">
+          <svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 3v12"/><path d="M7 10l5 5 5-5"/><path d="M4 19h16"/></svg>
+          Export Logs
+        </button>
+        <p class="toolbar__status mono" id="toolbar-status" role="status" aria-live="polite"></p>
+      </section>
+
+      <!-- REAL-TIME TERMINAL -->
+      <section class="card card--span-12 card--terminal" id="live-terminal">
+        <div class="card__header">
+          <div class="section-label">
+            <span class="section-label__mark" aria-hidden="true"></span>
+            <h2>Real-Time Console</h2>
+          </div>
+          <div class="terminal-header__right">
+            <div class="packet-ticker" aria-hidden="true">
+              <div class="packet-ticker__bars" id="packet-bars"></div>
+              <span class="mono" id="packet-rate">0 pkt/s</span>
+            </div>
+            <span class="status-pill status-pill--ok" id="live-status-pill">
+              <span class="pulse-dot" id="live-pulse-dot" aria-hidden="true"></span>
+              <span id="live-status-label">Streaming</span>
+            </span>
+          </div>
+        </div>
+        <div class="terminal" id="log-terminal" role="log" aria-live="polite"></div>
+      </section>
+
+      <!-- LOG TABLE -->
+      <section class="card card--span-12" id="log-table-section">
+        <div class="card__header">
+          <div class="section-label">
+            <span class="section-label__mark" aria-hidden="true"></span>
+            <h2>Log Records</h2>
+          </div>
+          <span class="mono dim card__hint" id="log-table-hint">— entries</span>
+        </div>
+        <div class="table-wrap">
+          <table class="data-table">
+            <thead>
+              <tr>
+                <th>Timestamp</th>
+                <th>Source IP</th>
+                <th>Destination IP</th>
+                <th>Event Type</th>
+                <th>Severity</th>
+                <th>Status</th>
+              </tr>
+            </thead>
+            <tbody id="log-table-body"></tbody>
+          </table>
+        </div>
+        <p class="empty-note" id="log-empty-note" hidden>No log entries match the current filter.</p>
+      </section>
+
+    </main>
+
+    <footer class="app-footer">
+      <span>&copy; 2026 SentinelAI-X</span>
+      <span class="brand-footer__sep">&middot;</span>
+      <span>Security Operations Center</span>
+    </footer>
+
+  </div>
+
+</div>
+
+<script src="js/live-logs.js"></script>
+</body>
+</html>

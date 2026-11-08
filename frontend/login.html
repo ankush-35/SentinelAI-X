@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SentinelAI-X | Secure Access</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600;700&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/login.css">
+</head>
+<body>
+
+<div class="noise-overlay"></div>
+
+<main class="login-shell">
+
+  <!-- ===================== LEFT PANEL ===================== -->
+  <section class="brand-panel" aria-label="SentinelAI-X">
+
+    <div class="brand-panel__grid" aria-hidden="true"></div>
+
+    <div class="brand-mark">
+      <div class="brand-mark__logo" aria-hidden="true">
+        <svg viewBox="0 0 48 48" width="34" height="34">
+          <polygon points="24,3 43,12 43,26 24,45 5,26 5,12" fill="none" stroke="#2E8BFF" stroke-width="1.8"/>
+          <polygon points="24,11 36,17 36,25 24,37 12,25 12,17" fill="none" stroke="#57A8FF" stroke-width="1.2" opacity="0.7"/>
+          <circle cx="24" cy="24" r="2.6" fill="#57A8FF"/>
+        </svg>
+      </div>
+      <div class="brand-mark__text">
+        <span class="brand-mark__name">SENTINEL<span class="accent">AI-X</span></span>
+        <span class="brand-mark__tag">NETWORK DEFENSE PLATFORM</span>
+      </div>
+    </div>
+
+    <!-- ================= HERO: NETWORK TOPOLOGY ================= -->
+    <div class="hero" aria-hidden="true">
+      <svg class="hero__graphic" viewBox="0 0 480 320" fill="none">
+
+        <!-- uplink / gateway -->
+        <polygon points="240,14 256,23 256,41 240,50 224,41 224,23" stroke="#4A4A4A" stroke-width="1.2"/>
+        <line x1="234" y1="22" x2="234" y2="42" stroke="#4A4A4A" stroke-width="1"/>
+        <line x1="246" y1="22" x2="246" y2="42" stroke="#4A4A4A" stroke-width="1"/>
+
+        <!-- links -->
+        <path d="M240,50 L240,88 L205,88 L205,120 L135,120 L135,178 L110,178 L110,238" stroke="#333333" stroke-width="1"/>
+        <path d="M240,50 L240,88 L275,88 L275,120 L345,120 L345,178 L390,178 L390,238" stroke="#333333" stroke-width="1"/>
+        <path d="M135,178 L160,178 L160,238" stroke="#333333" stroke-width="1"/>
+        <path d="M345,178 L320,178 L320,238" stroke="#333333" stroke-width="1"/>
+
+        <!-- core switch -->
+        <rect x="170" y="88" width="140" height="30" stroke="#2E8BFF" stroke-width="1.3"/>
+        <line x1="180" y1="88" x2="180" y2="98" stroke="#2E8BFF" stroke-width="1"/>
+        <line x1="194" y1="88" x2="194" y2="98" stroke="#2E8BFF" stroke-width="1"/>
+        <line x1="208" y1="88" x2="208" y2="98" stroke="#2E8BFF" stroke-width="1"/>
+        <line x1="222" y1="88" x2="222" y2="98" stroke="#2E8BFF" stroke-width="1"/>
+        <line x1="258" y1="88" x2="258" y2="98" stroke="#2E8BFF" stroke-width="1"/>
+        <line x1="272" y1="88" x2="272" y2="98" stroke="#2E8BFF" stroke-width="1"/>
+        <line x1="286" y1="88" x2="286" y2="98" stroke="#2E8BFF" stroke-width="1"/>
+        <line x1="300" y1="88" x2="300" y2="98" stroke="#2E8BFF" stroke-width="1"/>
+        <circle cx="182" cy="109" r="2" fill="#2D8C45"/>
+        <circle cx="192" cy="109" r="2" fill="#57A8FF"/>
+
+        <!-- distribution switches -->
+        <rect x="90" y="120" width="90" height="22" stroke="#4A4A4A" stroke-width="1.1"/>
+        <line x1="100" y1="120" x2="100" y2="128" stroke="#4A4A4A" stroke-width="1"/>
+        <line x1="112" y1="120" x2="112" y2="128" stroke="#4A4A4A" stroke-width="1"/>
+        <line x1="124" y1="120" x2="124" y2="128" stroke="#4A4A4A" stroke-width="1"/>
+        <circle cx="167" cy="131" r="1.8" fill="#57A8FF"/>
+
+        <rect x="300" y="120" width="90" height="22" stroke="#4A4A4A" stroke-width="1.1"/>
+        <line x1="356" y1="120" x2="356" y2="128" stroke="#4A4A4A" stroke-width="1"/>
+        <line x1="368" y1="120" x2="368" y2="128" stroke="#4A4A4A" stroke-width="1"/>
+        <line x1="380" y1="120" x2="380" y2="128" stroke="#4A4A4A" stroke-width="1"/>
+        <circle cx="313" cy="131" r="1.8" fill="#57A8FF"/>
+
+        <!-- endpoint nodes -->
+        <circle cx="110" cy="242" r="5" stroke="#5A5A5A" stroke-width="1.2"/>
+        <circle cx="160" cy="242" r="5" stroke="#5A5A5A" stroke-width="1.2"/>
+        <circle cx="320" cy="242" r="5" stroke="#5A5A5A" stroke-width="1.2"/>
+        <circle cx="390" cy="242" r="5" stroke="#5A5A5A" stroke-width="1.2"/>
+
+        <!-- live traffic pulse -->
+        <circle r="3" fill="#57A8FF">
+          <animateMotion dur="3.2s" repeatCount="indefinite"
+            path="M240,50 L240,88 L205,88 L205,120 L135,120 L135,178 L160,178 L160,238" />
+          <animate attributeName="opacity" values="0;1;1;0" keyTimes="0;0.08;0.85;1" dur="3.2s" repeatCount="indefinite"/>
+        </circle>
+
+      </svg>
+    </div>
+
+    <p class="brand-subtitle">AI-Powered Network Intrusion Detection<br>and Monitoring System</p>
+
+    <footer class="brand-footer">
+      <span>&copy; 2026 SentinelAI-X</span>
+      <span class="brand-footer__sep">&middot;</span>
+      <span>Security Operations Center</span>
+    </footer>
+
+  </section>
+
+  <!-- ===================== RIGHT PANEL ===================== -->
+  <section class="auth-panel" aria-label="Login">
+    <div class="auth-card" role="region" aria-labelledby="auth-heading">
+
+      <div class="auth-card__header">
+        <div class="section-label">
+          <span class="section-label__mark" aria-hidden="true"></span>
+          <h1 id="auth-heading">OPERATOR SIGN-IN</h1>
+        </div>
+        <p>Authenticate to access the monitoring console.</p>
+      </div>
+
+      <form id="login-form" class="auth-form" novalidate>
+
+        <div class="field" id="field-agent">
+          <label for="agent-id">Agent ID</label>
+          <input
+            type="text"
+            id="agent-id"
+            name="agentId"
+            autocomplete="username"
+            placeholder="e.g. AGT-00417"
+            spellcheck="false"
+          />
+          <span class="field__error" id="error-agent">Agent ID is required.</span>
+        </div>
+
+        <div class="field" id="field-password">
+          <label for="password">Password</label>
+          <div class="input-wrap">
+            <input
+              type="password"
+              id="password"
+              name="password"
+              autocomplete="current-password"
+              placeholder="Enter password"
+            />
+            <button type="button" class="toggle-visibility" id="toggle-password" aria-label="Show password" aria-pressed="false">
+              <svg class="icon-eye" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6">
+                <path d="M1 12s4-7 11-7 11 7 11 7-4 7-11 7-11-7-11-7z"/>
+                <circle cx="12" cy="12" r="3"/>
+              </svg>
+              <svg class="icon-eye-off" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" style="display:none">
+                <path d="M17.94 17.94A10.94 10.94 0 0112 19c-7 0-11-7-11-7a20.3 20.3 0 015.06-5.94M9.9 4.24A10.4 10.4 0 0112 4c7 0 11 7 11 7a20.3 20.3 0 01-2.41 3.34M14.12 14.12a3 3 0 11-4.24-4.24"/>
+                <line x1="1" y1="1" x2="23" y2="23"/>
+              </svg>
+            </button>
+          </div>
+          <span class="field__error" id="error-password">Password is required.</span>
+        </div>
+
+        <div class="field-row">
+          <label class="checkbox">
+            <input type="checkbox" id="remember-device" name="rememberDevice">
+            <span class="checkbox__box" aria-hidden="true"></span>
+            <span class="checkbox__label">Remember this device</span>
+          </label>
+
+          <a href="#" class="link-muted" id="forgot-password">Forgot password?</a>
+        </div>
+
+        <button type="submit" class="btn-login" id="login-btn">
+          <span class="btn-login__label">AUTHENTICATE</span>
+          <span class="btn-login__spinner" aria-hidden="true"></span>
+        </button>
+
+        <p class="form-note" id="form-status" role="status" aria-live="polite"></p>
+
+      </form>
+
+      <div class="auth-card__footer">
+        <span class="secure-badge">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <rect x="4" y="10" width="16" height="10" rx="1.5"/>
+            <path d="M7 10V7a5 5 0 0110 0v3"/>
+          </svg>
+          256-BIT ENCRYPTED SESSION
+        </span>
+      </div>
+
+    </div>
+  </section>
+
+</main>
+
+<script src="js/login.js"></script>
+</body>
+</html>

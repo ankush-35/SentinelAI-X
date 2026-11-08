@@ -1,0 +1,460 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SentinelAI-X | Network</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600;700&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/network.css">
+</head>
+<body>
+
+<div class="noise-overlay"></div>
+
+<div class="app-shell">
+
+  <!-- ===================== SIDEBAR ===================== -->
+  <aside class="sidebar" id="sidebar">
+
+    <div class="sidebar__brand">
+      <div class="brand-mark__logo" aria-hidden="true">
+        <svg viewBox="0 0 48 48" width="30" height="30">
+          <polygon points="24,3 43,12 43,26 24,45 5,26 5,12" fill="none" stroke="#2E8BFF" stroke-width="1.8"/>
+          <polygon points="24,11 36,17 36,25 24,37 12,25 12,17" fill="none" stroke="#57A8FF" stroke-width="1.2" opacity="0.7"/>
+          <circle cx="24" cy="24" r="2.6" fill="#57A8FF"/>
+        </svg>
+      </div>
+      <div class="sidebar__brand-text">
+        <span class="brand-mark__name">SENTINEL<span class="accent">AI-X</span></span>
+        <span class="brand-mark__tag">NETWORK DEFENSE PLATFORM</span>
+      </div>
+    </div>
+
+    <nav class="sidebar__nav" aria-label="Primary">
+      <span class="sidebar__label">Monitor</span>
+      <ul class="nav-list">
+        <li>
+          <a href="dashboard.html" class="nav-link">
+            <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="3" y="3" width="8" height="8"/><rect x="13" y="3" width="8" height="5"/><rect x="13" y="11" width="8" height="10"/><rect x="3" y="14" width="8" height="7"/></svg>
+            <span>Overview</span>
+          </a>
+        </li>
+        <li>
+          <a href="threat-summary.html" class="nav-link">
+            <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M12 3l8 4v5c0 5-3.5 8.5-8 9-4.5-.5-8-4-8-9V7l8-4z"/></svg>
+            <span>Threat Summary</span>
+          </a>
+        </li>
+        <li>
+          <a href="network.html" class="nav-link is-active">
+            <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="12" cy="5" r="2.2"/><circle cx="5" cy="19" r="2.2"/><circle cx="19" cy="19" r="2.2"/><path d="M12 7.2v4M12 11.2L6.3 17M12 11.2L17.7 17"/></svg>
+            <span>Network</span>
+          </a>
+        </li>
+       <li>
+    <a href="live-logs.html" class="nav-link">
+        <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6">
+            <rect x="3" y="4" width="18" height="16" rx="0.5"/>
+            <path d="M7 9l3 2-3 2M12 13h5"/>
+        </svg>
+        <span>Live Logs</span>
+    </a>
+</li>
+      </ul>
+
+      <span class="sidebar__label">Manage</span>
+      <ul class="nav-list">
+        <li>
+          <a href="alerts.html" class="nav-link">
+            <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M18 8a6 6 0 10-12 0c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.7 21a2 2 0 01-3.4 0"/></svg>
+            <span>Alerts</span>
+            <span class="nav-badge">3</span>
+          </a>
+        </li>
+        <li>
+          <a href="settings.html" class="nav-link">
+            <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="12" cy="12" r="3"/><path d="M19.4 13a7.6 7.6 0 000-2l2-1.6-2-3.4-2.4 1a7.7 7.7 0 00-1.7-1L15 3h-6l-.3 2.4a7.7 7.7 0 00-1.7 1l-2.4-1-2 3.4L4.6 11a7.6 7.6 0 000 2l-2 1.6 2 3.4 2.4-1a7.7 7.7 0 001.7 1L9 21h6l.3-2.4a7.7 7.7 0 001.7-1l2.4 1 2-3.4-2-1.6z"/></svg>
+            <span>Settings</span>
+          </a>
+        </li>
+      </ul>
+    </nav>
+
+    <div class="sidebar__footer">
+      <button type="button" class="logout-btn" id="logout-btn">
+        <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M9 21H5a2 2 0 01-2-2V5a2 2 0 012-2h4"/><path d="M16 17l5-5-5-5"/><path d="M21 12H9"/></svg>
+        <span>End Session</span>
+      </button>
+    </div>
+
+  </aside>
+
+  <div class="sidebar-backdrop" id="sidebar-backdrop"></div>
+
+  <!-- ===================== MAIN ===================== -->
+  <div class="main">
+
+    <!-- ===================== TOP BAR ===================== -->
+    <header class="topbar">
+      <div class="topbar__left">
+        <button type="button" class="menu-toggle" id="menu-toggle" aria-label="Toggle navigation">
+          <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.8"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+        </button>
+        <div class="section-label">
+          <span class="section-label__mark" aria-hidden="true"></span>
+          <h1>NETWORK</h1>
+        </div>
+      </div>
+
+      <div class="topbar__right">
+        <div class="topbar__clock" id="topbar-clock">
+          <span class="mono" id="clock-time">00:00:00</span>
+          <span class="dim mono" id="clock-date">—</span>
+        </div>
+
+        <button type="button" class="icon-btn" aria-label="Notifications">
+          <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M18 8a6 6 0 10-12 0c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.7 21a2 2 0 01-3.4 0"/></svg>
+          <span class="icon-btn__dot"></span>
+        </button>
+
+        <div class="agent-chip">
+          <span class="dot dot--ok" aria-hidden="true"></span>
+          <span class="mono">AGT-00417</span>
+        </div>
+      </div>
+    </header>
+
+    <!-- ===================== CONTENT ===================== -->
+    <main class="content">
+
+      <!-- ROUTER STATUS -->
+      <section class="card card--span-4" id="router-status">
+        <div class="card__header">
+          <div class="section-label">
+            <span class="section-label__mark" aria-hidden="true"></span>
+            <h2>Router Status</h2>
+          </div>
+          <span class="status-pill status-pill--ok"><span class="pulse-dot" aria-hidden="true"></span>Online</span>
+        </div>
+        <ul class="status-list">
+          <li class="status-row">
+            <span class="status-row__key">Model</span>
+            <span class="status-row__val mono">SNX-RTR900</span>
+          </li>
+          <li class="status-row">
+            <span class="status-row__key">Firmware</span>
+            <span class="status-row__val mono">v4.12.2</span>
+          </li>
+          <li class="status-row">
+            <span class="status-row__key">Gateway IP</span>
+            <span class="status-row__val mono">10.0.4.1</span>
+          </li>
+          <li class="status-row">
+            <span class="status-row__key">Uptime</span>
+            <span class="status-row__val mono">21d 04h 12m</span>
+          </li>
+        </ul>
+      </section>
+
+      <!-- NETWORK HEALTH -->
+      <section class="card card--span-4" id="network-health">
+        <div class="card__header">
+          <div class="section-label">
+            <span class="section-label__mark" aria-hidden="true"></span>
+            <h2>Network Health</h2>
+          </div>
+          <span class="status-pill status-pill--ok" id="health-pill">Excellent</span>
+        </div>
+        <ul class="status-list">
+          <li class="status-row">
+            <span class="status-row__key">Latency</span>
+            <span class="status-row__val mono" id="health-latency">12 ms</span>
+          </li>
+          <li class="status-row">
+            <span class="status-row__key">Packet Loss</span>
+            <span class="status-row__val mono" id="health-loss">0.0%</span>
+          </li>
+          <li class="status-row">
+            <span class="status-row__key">Jitter</span>
+            <span class="status-row__val mono" id="health-jitter">1.2 ms</span>
+          </li>
+          <li class="status-row">
+            <span class="status-row__key">DNS Resolution</span>
+            <span class="status-row__val"><span class="dot dot--ok"></span>Nominal</span>
+          </li>
+        </ul>
+      </section>
+
+      <!-- CONNECTED DEVICES -->
+      <section class="card card--span-4" id="connected-devices-summary">
+        <div class="card__header">
+          <div class="section-label">
+            <span class="section-label__mark" aria-hidden="true"></span>
+            <h2>Connected Devices</h2>
+          </div>
+        </div>
+        <div class="gauge-row">
+          <span class="gauge-row__value mono" id="device-count">0</span>
+          <span class="gauge-row__meta mono dim">/ 24 max leases</span>
+        </div>
+        <div class="device-split">
+          <div class="device-split__item">
+            <span class="dot dot--ok"></span>Wired <span class="mono" id="wired-count">0</span>
+          </div>
+          <div class="device-split__item">
+            <span class="dot" style="background:var(--blue-focus)"></span>Wireless <span class="mono" id="wireless-count">0</span>
+          </div>
+          <div class="device-split__item">
+            <span class="dot dot--warn"></span>Idle <span class="mono" id="idle-count">0</span>
+          </div>
+        </div>
+      </section>
+
+      <!-- UPLOAD SPEED -->
+      <section class="card card--span-3" id="upload-speed">
+        <div class="card__header">
+          <div class="section-label">
+            <span class="section-label__mark" aria-hidden="true"></span>
+            <h2>Upload</h2>
+          </div>
+        </div>
+        <div class="speed-value">
+          <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" class="speed-value__arrow speed-value__arrow--up"><path d="M12 19V5M5 12l7-7 7 7"/></svg>
+          <span class="mono" id="upload-value">0.0</span>
+          <span class="speed-value__unit">Mbps</span>
+        </div>
+        <div class="gauge-track"><div class="gauge-fill gauge-fill--blue" id="upload-fill" style="width:0%"></div></div>
+        <span class="mono dim card__hint" id="upload-peak">Peak: — Mbps</span>
+      </section>
+
+      <!-- DOWNLOAD SPEED -->
+      <section class="card card--span-3" id="download-speed">
+        <div class="card__header">
+          <div class="section-label">
+            <span class="section-label__mark" aria-hidden="true"></span>
+            <h2>Download</h2>
+          </div>
+        </div>
+        <div class="speed-value">
+          <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" class="speed-value__arrow speed-value__arrow--down"><path d="M12 5v14M5 12l7 7 7-7"/></svg>
+          <span class="mono" id="download-value">0.0</span>
+          <span class="speed-value__unit">Mbps</span>
+        </div>
+        <div class="gauge-track"><div class="gauge-fill gauge-fill--blue" id="download-fill" style="width:0%"></div></div>
+        <span class="mono dim card__hint" id="download-peak">Peak: — Mbps</span>
+      </section>
+
+      <!-- PACKET STATISTICS -->
+      <section class="card card--span-6" id="packet-statistics">
+        <div class="card__header">
+          <div class="section-label">
+            <span class="section-label__mark" aria-hidden="true"></span>
+            <h2>Packet Statistics</h2>
+          </div>
+          <span class="mono dim card__hint">LAST 60S</span>
+        </div>
+        <div class="stat-grid stat-grid--4">
+          <div class="stat-box stat-box--blue">
+            <span class="stat-box__value mono" id="pkt-sent">0</span>
+            <span class="stat-box__label">Sent</span>
+          </div>
+          <div class="stat-box stat-box--success">
+            <span class="stat-box__value mono" id="pkt-received">0</span>
+            <span class="stat-box__label">Received</span>
+          </div>
+          <div class="stat-box stat-box--warning">
+            <span class="stat-box__value mono" id="pkt-errors">0</span>
+            <span class="stat-box__label">Errors</span>
+          </div>
+          <div class="stat-box stat-box--danger">
+            <span class="stat-box__value mono" id="pkt-dropped">0</span>
+            <span class="stat-box__label">Dropped</span>
+          </div>
+        </div>
+      </section>
+
+      <!-- ACTIVE INTERFACES -->
+      <section class="card card--span-4 iface-card" id="iface-eth0">
+        <div class="card__header">
+          <div class="section-label">
+            <span class="section-label__mark" aria-hidden="true"></span>
+            <h2>eth0</h2>
+          </div>
+          <span class="status-pill status-pill--ok"><span class="pulse-dot" aria-hidden="true"></span>Up</span>
+        </div>
+        <ul class="status-list">
+          <li class="status-row"><span class="status-row__key">Type</span><span class="status-row__val">Ethernet</span></li>
+          <li class="status-row"><span class="status-row__key">IP Address</span><span class="status-row__val mono">10.0.4.12/24</span></li>
+          <li class="status-row"><span class="status-row__key">Speed</span><span class="status-row__val mono">1000 Mbps</span></li>
+          <li class="status-row"><span class="status-row__key">Throughput</span><span class="status-row__val mono" id="eth0-throughput">— Mb/s</span></li>
+        </ul>
+      </section>
+
+      <section class="card card--span-4 iface-card" id="iface-wlan0">
+        <div class="card__header">
+          <div class="section-label">
+            <span class="section-label__mark" aria-hidden="true"></span>
+            <h2>wlan0</h2>
+          </div>
+          <span class="status-pill status-pill--ok"><span class="pulse-dot" aria-hidden="true"></span>Up</span>
+        </div>
+        <ul class="status-list">
+          <li class="status-row"><span class="status-row__key">Type</span><span class="status-row__val">Wi-Fi 6 (5GHz)</span></li>
+          <li class="status-row"><span class="status-row__key">IP Address</span><span class="status-row__val mono">10.0.4.31/24</span></li>
+          <li class="status-row"><span class="status-row__key">Speed</span><span class="status-row__val mono">866 Mbps</span></li>
+          <li class="status-row"><span class="status-row__key">Throughput</span><span class="status-row__val mono" id="wlan0-throughput">— Mb/s</span></li>
+        </ul>
+      </section>
+
+      <section class="card card--span-4 iface-card" id="iface-tap0">
+        <div class="card__header">
+          <div class="section-label">
+            <span class="section-label__mark" aria-hidden="true"></span>
+            <h2>tap0</h2>
+          </div>
+          <span class="status-pill" id="tap0-pill">Idle</span>
+        </div>
+        <ul class="status-list">
+          <li class="status-row"><span class="status-row__key">Type</span><span class="status-row__val">VPN Tunnel</span></li>
+          <li class="status-row"><span class="status-row__key">IP Address</span><span class="status-row__val mono">172.16.0.1/30</span></li>
+          <li class="status-row"><span class="status-row__key">Speed</span><span class="status-row__val mono">—</span></li>
+          <li class="status-row"><span class="status-row__key">Throughput</span><span class="status-row__val mono dim">0.0 Mb/s</span></li>
+        </ul>
+      </section>
+
+      <!-- NETWORK TOPOLOGY -->
+      <section class="card card--span-12" id="network-topology">
+        <div class="card__header">
+          <div class="section-label">
+            <span class="section-label__mark" aria-hidden="true"></span>
+            <h2>Network Topology</h2>
+          </div>
+          <span class="status-pill status-pill--ok"><span class="pulse-dot" aria-hidden="true"></span>Live</span>
+        </div>
+        <div class="topology-wrap">
+          <svg class="topology" viewBox="0 0 760 250" fill="none" id="topology-svg">
+
+            <!-- WAN -->
+            <polygon points="50,112 66,121 66,139 50,148 34,139 34,121" stroke="#4A4A4A" stroke-width="1.2"/>
+            <text x="50" y="166" text-anchor="middle" class="topo-label">WAN</text>
+
+            <!-- links: WAN -> Router -> Switch -->
+            <path d="M66,130 L140,130" stroke="#333333" stroke-width="1"/>
+            <path d="M230,130 L310,130" stroke="#333333" stroke-width="1"/>
+
+            <!-- Router -->
+            <rect x="140" y="112" width="90" height="36" stroke="#2E8BFF" stroke-width="1.3"/>
+            <line x1="150" y1="112" x2="150" y2="122" stroke="#2E8BFF" stroke-width="1"/>
+            <line x1="164" y1="112" x2="164" y2="122" stroke="#2E8BFF" stroke-width="1"/>
+            <line x1="178" y1="112" x2="178" y2="122" stroke="#2E8BFF" stroke-width="1"/>
+            <circle cx="152" cy="139" r="2" fill="#2D8C45"/>
+            <text x="185" y="166" text-anchor="middle" class="topo-label">ROUTER</text>
+
+            <!-- Switch -->
+            <rect x="310" y="112" width="90" height="36" stroke="#4A4A4A" stroke-width="1.2"/>
+            <line x1="320" y1="112" x2="320" y2="122" stroke="#4A4A4A" stroke-width="1"/>
+            <line x1="334" y1="112" x2="334" y2="122" stroke="#4A4A4A" stroke-width="1"/>
+            <line x1="348" y1="112" x2="348" y2="122" stroke="#4A4A4A" stroke-width="1"/>
+            <circle cx="322" cy="139" r="2" fill="#57A8FF"/>
+            <text x="355" y="166" text-anchor="middle" class="topo-label">CORE-SW</text>
+
+            <!-- Wireless devices (dashed = wifi) -->
+            <path d="M170,112 L170,60 L110,60" stroke="#3C3C3C" stroke-width="1" stroke-dasharray="3 3"/>
+            <circle cx="100" cy="60" r="9" stroke="#5A5A5A" stroke-width="1.2"/>
+            <text x="100" y="38" text-anchor="middle" class="topo-label">PHN-ANKUSH</text>
+            <circle cx="98" cy="60" r="1.6" fill="#2D8C45"/>
+
+            <path d="M200,112 L200,50 L250,50" stroke="#3C3C3C" stroke-width="1" stroke-dasharray="3 3"/>
+            <circle cx="260" cy="50" r="9" stroke="#5A5A5A" stroke-width="1.2"/>
+            <text x="260" y="28" text-anchor="middle" class="topo-label">TAB-GUEST</text>
+            <circle cx="258" cy="50" r="1.6" fill="#C58A00"/>
+
+            <!-- Wired devices -->
+            <path d="M400,124 L440,124 L440,210" stroke="#333333" stroke-width="1"/>
+            <path d="M400,130 L520,130 L520,210" stroke="#333333" stroke-width="1"/>
+            <path d="M400,136 L600,136 L600,210" stroke="#333333" stroke-width="1"/>
+            <path d="M400,142 L680,142 L680,210" stroke="#333333" stroke-width="1"/>
+
+            <circle cx="440" cy="220" r="9" stroke="#5A5A5A" stroke-width="1.2"/>
+            <text x="440" y="242" text-anchor="middle" class="topo-label">LAPTOP-07</text>
+            <circle cx="438" cy="220" r="1.6" fill="#2D8C45"/>
+
+            <circle cx="520" cy="220" r="9" stroke="#5A5A5A" stroke-width="1.2"/>
+            <text x="520" y="242" text-anchor="middle" class="topo-label">DESKTOP-12</text>
+            <circle cx="518" cy="220" r="1.6" fill="#2D8C45"/>
+
+            <circle cx="600" cy="220" r="9" stroke="#5A5A5A" stroke-width="1.2"/>
+            <text x="600" y="242" text-anchor="middle" class="topo-label">SRV-DB01</text>
+            <circle cx="598" cy="220" r="1.6" fill="#2D8C45"/>
+
+            <circle cx="680" cy="220" r="9" stroke="#5A5A5A" stroke-width="1.2"/>
+            <text x="680" y="242" text-anchor="middle" class="topo-label">NAS-01</text>
+            <circle cx="678" cy="220" r="1.6" fill="#C58A00"/>
+
+            <!-- live traffic pulse -->
+            <circle r="3" fill="#57A8FF">
+              <animateMotion dur="3.4s" repeatCount="indefinite"
+                path="M66,130 L140,130 M140,130 L230,130 L310,130 L400,130 L520,130 L520,210" />
+              <animate attributeName="opacity" values="0;1;1;0" keyTimes="0;0.06;0.88;1" dur="3.4s" repeatCount="indefinite"/>
+            </circle>
+
+          </svg>
+        </div>
+      </section>
+
+      <!-- BANDWIDTH USAGE CHART -->
+      <section class="card card--span-12" id="bandwidth-usage">
+        <div class="card__header">
+          <div class="section-label">
+            <span class="section-label__mark" aria-hidden="true"></span>
+            <h2>Bandwidth Usage</h2>
+          </div>
+          <div class="chart-legend">
+            <span><span class="dot" style="background:var(--blue-focus)"></span>Download</span>
+            <span><span class="dot" style="background:var(--warning)"></span>Upload</span>
+          </div>
+        </div>
+        <div class="bandwidth-chart" id="bandwidth-chart"></div>
+      </section>
+
+      <!-- DEVICE TABLE -->
+      <section class="card card--span-12" id="device-table-section">
+        <div class="card__header">
+          <div class="section-label">
+            <span class="section-label__mark" aria-hidden="true"></span>
+            <h2>Connected Devices</h2>
+          </div>
+          <span class="mono dim card__hint" id="device-table-hint">— devices</span>
+        </div>
+        <div class="table-wrap">
+          <table class="data-table">
+            <thead>
+              <tr>
+                <th>Device Name</th>
+                <th>IP Address</th>
+                <th>MAC Address</th>
+                <th>Status</th>
+                <th>Traffic</th>
+              </tr>
+            </thead>
+            <tbody id="device-table-body"></tbody>
+          </table>
+        </div>
+      </section>
+
+    </main>
+
+    <footer class="app-footer">
+      <span>&copy; 2026 SentinelAI-X</span>
+      <span class="brand-footer__sep">&middot;</span>
+      <span>Security Operations Center</span>
+    </footer>
+
+  </div>
+
+</div>
+
+<script src="js/network.js"></script>
+</body>
+</html>
